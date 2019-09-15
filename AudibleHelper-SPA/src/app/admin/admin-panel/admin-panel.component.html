@@ -1,0 +1,28 @@
+<div class="container mt-5">
+  <h2>Admin Panel</h2>
+  <div class="tab-panel">
+    <tabset class="member-tabset">
+      <tab heading="Roles" *appHasRole="['Admin']">
+        <div class="container">
+            <app-user-management></app-user-management>
+        </div>
+      </tab>
+      <tab heading="Create account" *appHasRole="['Admin','Moderator']">
+          <div class="row justify-content-center">
+              <div class="col-4">
+                <app-register></app-register>
+              </div>
+            </div>
+      </tab>
+      <tab heading="Reviews" *appHasRole="['Admin','Moderator']">
+        Reviews will go here
+      </tab>
+      <tab heading="Sessions" *appHasRole="['Admin','Moderator']">
+        Session will go here
+      </tab>
+      <tab heading="Payments" *appHasRole="['Admin','Moderator']">
+        Payment will go here
+      </tab>
+    </tabset>
+  </div>
+</div>
