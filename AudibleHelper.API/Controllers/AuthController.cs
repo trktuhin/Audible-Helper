@@ -46,6 +46,7 @@ namespace AudibleHelper.API.Controllers
             var userToReturn = _mapper.Map<UserForDetailDto>(userToCreate);
             if(result.Succeeded)
             {
+                await _userManager.AddToRoleAsync(userToCreate,"Member");
                 return CreatedAtRoute("GetUser",new {controller="Users", id = userToCreate.Id}, userToReturn);
             }
             return BadRequest(result.Errors);

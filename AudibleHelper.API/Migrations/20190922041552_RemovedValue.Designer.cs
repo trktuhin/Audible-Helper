@@ -3,14 +3,16 @@ using System;
 using AudibleHelper.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DatingApp.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190922041552_RemovedValue")]
+    partial class RemovedValue
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,25 +70,6 @@ namespace DatingApp.API.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Photos");
-                });
-
-            modelBuilder.Entity("AudibleHelper.API.Models.Review", b =>
-                {
-                    b.Property<string>("PenName");
-
-                    b.Property<string>("BookAsin");
-
-                    b.Property<DateTime>("ReviewDate");
-
-                    b.Property<string>("Country");
-
-                    b.Property<string>("ReviewTitle");
-
-                    b.Property<int>("ReviewerId");
-
-                    b.HasKey("PenName", "BookAsin", "ReviewDate");
-
-                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("AudibleHelper.API.Models.Role", b =>

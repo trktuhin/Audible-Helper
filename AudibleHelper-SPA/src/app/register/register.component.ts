@@ -53,11 +53,7 @@ register() {
       this.authService.register(this.user).subscribe(() => {
         this.alertify.success('Registration successful');
       }, err => {
-        this.alertify.error(err);
-      }, () => {
-        this.authService.login(this.user).subscribe(() => {
-          this.router.navigate(['/members']);
-        });
+        this.alertify.error('Could not create account');
       });
     }
   }
