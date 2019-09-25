@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AudibleHelper.API.Helpers;
@@ -17,5 +18,6 @@ namespace AudibleHelper.API.Data
          Task<Message> GetMessage(int id);
          Task<PagedList<Message>> GetMessagesForUser(MessageParams messageParams);
          Task<IEnumerable<Message>> GetMessageThread(int userId, int recipientId);
+         Task<Review> GetReview(string penName, string bookAsin, DateTime reviewDate);
     }
 }

@@ -124,5 +124,11 @@ namespace AudibleHelper.API.Data
                 .OrderBy(m => m.MessageSent).ToListAsync();
             return messages;
         }
+
+        public async Task<Review> GetReview(string penName, string bookAsin, DateTime reviewDate)
+        {
+            return await _context.Reviews.FirstOrDefaultAsync(rev => rev.PenName == penName 
+                        && rev.BookAsin == bookAsin && rev.ReviewDate == reviewDate);
+        }
     }
 }

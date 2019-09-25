@@ -1,15 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using AudibleHelper.API.Data;
 using AudibleHelper.API.Dtos;
 using AudibleHelper.API.Models;
 using AutoMapper;
 using HtmlAgilityPack;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using OfficeOpenXml;
 
 namespace AudibleHelper.API.Controllers
 {
@@ -26,26 +30,41 @@ namespace AudibleHelper.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddReview(ReviewForCreationDto dto)
+        public async Task<IActionResult> AddReview([FromForm]ReviewForCreationDto dto)
         {
             int reviewerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            //should get from excel
-            dto.MinimumDate = DateTime.Now.AddDays(-1);
+            int count = 0;
             try
             {
+                var dt = GetTableFromExcel(dto.File);
+                var minDate = dt.Compute("MIN(Date)",null).ToString();
+                dto.MinimumDate = DateTime.ParseExact(minDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
                 var reviewsFromWeb = GetReviewsFromWeb(dto, reviewerId);
-                foreach(var review in reviewsFromWeb)
+                foreach (var review in reviewsFromWeb)
                 {
-                    //check if review is okay and not in the database already
-                    _repo.Add(review);
+                    var dataRow = dt.Select("Name = '"+ review.PenName +"'").FirstOrDefault();
+                    if(dataRow!=null)
+                    {
+                        var date = dataRow["Date"].ToString();
+                        var reviewDate = DateTime.ParseExact(date, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+                        if(reviewDate == review.ReviewDate)
+                        {
+                            var revInDb = await _repo.GetReview(review.PenName,review.BookAsin,review.ReviewDate);
+                            if(revInDb==null)
+                            {
+                                _repo.Add(review);
+                                count++;
+                            }
+                        }
+                    }
                 }
-                _repo.SaveAll();
+                await _repo.SaveAll();
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return Ok();
+            return Ok(count);
         }
 
         private List<Review> GetReviewsFromWeb(ReviewForCreationDto dto, int reviewerId)
@@ -117,17 +136,52 @@ namespace AudibleHelper.API.Controllers
                         revList.Add(review);
                     }
                 }
-                var nextPage = doc.GetElementbyId(nextPageId).GetAttributeValue("value", "");
-                if (nextPage == null || minDate)
+                string nextPage="0";
+                try
+                {
+                    nextPage = doc.GetElementbyId(nextPageId).GetAttributeValue("value", "");
+                    nextPageNo = Convert.ToInt32(nextPage);
+                    
+                } catch(Exception ex)
                 {
                     nextPageNo = -1;
                 }
-                else
+                if (minDate)
                 {
-                    nextPageNo = Convert.ToInt32(nextPage);
+                    nextPageNo = -1;
                 }
             }
             return revList;
+        }
+
+        private DataTable GetTableFromExcel(IFormFile file)
+        {
+            DataTable dt = new DataTable();
+            using (var excelPack = new ExcelPackage())
+            {
+                //load excel stream
+                using (var stream = file.OpenReadStream())
+                {
+                    excelPack.Load(stream);
+                }
+                var ws = excelPack.Workbook.Worksheets[0];
+                bool hasHeader = true;
+                foreach (var firstRowCell in ws.Cells[1, 1, 1, ws.Dimension.End.Column])
+                {
+                    dt.Columns.Add(hasHeader ? firstRowCell.Text : string.Format("Column {0}", firstRowCell.Start.Column));
+                }
+                var startRow = hasHeader ? 2 : 1;
+                for (int rowNum = startRow; rowNum <= ws.Dimension.End.Row; rowNum++)
+                {
+                    var wsRow = ws.Cells[rowNum, 1, rowNum, ws.Dimension.End.Column];
+                    DataRow row = dt.Rows.Add();
+                    foreach (var cell in wsRow)
+                    {
+                        row[cell.Start.Column - 1] = cell.Text;
+                    }
+                }
+            }
+            return dt;
         }
     }
 }

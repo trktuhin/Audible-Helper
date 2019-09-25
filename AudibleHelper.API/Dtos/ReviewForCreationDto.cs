@@ -1,4 +1,5 @@
 using System;
+using Microsoft.AspNetCore.Http;
 
 namespace AudibleHelper.API.Dtos
 {
@@ -10,5 +11,6 @@ namespace AudibleHelper.API.Dtos
         public string Country { get; set; }
         public string ReviewTitle { get; set; }
         public DateTime MinimumDate { get; set; }
+        public IFormFile File { get; set; }
     }
 }
