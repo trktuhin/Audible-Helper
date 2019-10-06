@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import {HttpClientModule} from '@angular/common/http';
 import { NavComponent } from './nav/nav.component';
 import { NgxGalleryModule } from 'ngx-gallery';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AuthService } from './_services/auth.service';
@@ -14,7 +15,6 @@ import { RegisterComponent } from './register/register.component';
 import { ErrorInterceptorProvider } from './_services/error.interceptor';
 import { AlertifyService } from './_services/alertify.service';
 import { MemberListComponent } from './members/member-list/member-list.component';
-import { ListsComponent } from './lists/lists.component';
 import { MessagesComponent } from './messages/messages.component';
 import { appRoutes } from './routes';
 import { AuthGuard } from './_guards/Auth.guard';
@@ -38,6 +38,10 @@ import { UserManagementComponent } from './admin/user-management/user-management
 import { AdminService } from './_services/admin.service';
 import { RolesModalComponent } from './admin/roles-modal/roles-modal.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { ReviewListComponent } from './review-list/review-list.component';
+import { ReviewService } from './_services/review.service';
+import { ReviewListResolver } from './_resolvers/review-list.resolver';
+import { FetchReviewComponent } from './fetch-review/fetch-review.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -50,7 +54,6 @@ export function tokenGetter() {
       HomeComponent,
       RegisterComponent,
       MemberListComponent,
-      ListsComponent,
       MessagesComponent,
       MemberCardComponent,
       MemberDetailComponent,
@@ -62,7 +65,9 @@ export function tokenGetter() {
       HasRoleDirective,
       UserManagementComponent,
       RolesModalComponent,
-      ChangePasswordComponent
+      ChangePasswordComponent,
+      ReviewListComponent,
+      FetchReviewComponent
    ],
    imports: [
       BrowserModule,
@@ -72,6 +77,7 @@ export function tokenGetter() {
       NgxGalleryModule,
       FileUploadModule,
       ReactiveFormsModule,
+      NgxSpinnerModule,
       BsDropdownModule.forRoot(),
       ButtonsModule.forRoot(),
       PaginationModule.forRoot(),
@@ -96,7 +102,9 @@ export function tokenGetter() {
       MemberEditResolver,
       PreventUnsavedChanges,
       MessagesResolver,
-      AdminService
+      AdminService,
+      ReviewService,
+      ReviewListResolver
    ],
    entryComponents: [
     RolesModalComponent

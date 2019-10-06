@@ -77,6 +77,29 @@ namespace AudibleHelper.API.Data
             return await PagedList<User>.CreateAsync(users, userParams.PageNumber, userParams.PageSize);
         }
 
+        public async Task<PagedList<Review>> GetReviews(ReviewParams revParams)
+        {
+            var reviews = _context.Reviews.AsQueryable();
+            if(revParams.ReviewerId != 0)
+            {
+                reviews = reviews.Where(rev => rev.ReviewerId == revParams.ReviewerId);
+            }
+            if(revParams.DateFrom != null && revParams.DateFrom != DateTime.MinValue)
+            {
+                reviews = reviews.Where(rev => rev.ReviewDate >= revParams.DateFrom);
+            }
+            if(revParams.DateTo != null && revParams.DateFrom != DateTime.MinValue)
+            {
+                reviews = reviews.Where(rev => rev.ReviewDate <= revParams.DateTo);
+            }
+            if(!string.IsNullOrWhiteSpace(revParams.BookAsin))
+            {
+                reviews = reviews.Where(rev => rev.BookAsin == revParams.BookAsin);
+            }
+            reviews = reviews.OrderByDescending(rev => rev.ReviewDate);
+            return await PagedList<Review>.CreateAsync(reviews, revParams.PageNumber, revParams.PageSize);
+        }
+
         public async Task<bool> SaveAll()
         {
             return await _context.SaveChangesAsync() > 0;
@@ -130,5 +153,7 @@ namespace AudibleHelper.API.Data
             return await _context.Reviews.FirstOrDefaultAsync(rev => rev.PenName == penName 
                         && rev.BookAsin == bookAsin && rev.ReviewDate == reviewDate);
         }
+
+        
     }
 }

@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AudibleHelper.API.Data;
 using AudibleHelper.API.Dtos;
+using AudibleHelper.API.Helpers;
 using AudibleHelper.API.Models;
 using AutoMapper;
 using HtmlAgilityPack;
@@ -29,8 +30,21 @@ namespace AudibleHelper.API.Controllers
             _repo = repo;
         }
 
+        [HttpPost("GetReviews")]
+        public async Task<IActionResult> GetReviews(ReviewParams revParams)
+        {
+            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            if(revParams.ReviewerId == 0)
+            {
+                revParams.ReviewerId = currentUserId;
+            }
+            var reviews = await _repo.GetReviews(revParams);
+            Response.AddPagination(reviews.CurrentPage,reviews.PageSize,reviews.TotalCount,reviews.TotalPages);
+            return Ok(reviews);
+        }
+
         [HttpPost]
-        public async Task<IActionResult> AddReview([FromForm]ReviewForCreationDto dto)
+        public async Task<IActionResult> AddReviews([FromForm]ReviewForCreationDto dto)
         {
             int reviewerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             int count = 0;
@@ -38,7 +52,8 @@ namespace AudibleHelper.API.Controllers
             {
                 var dt = GetTableFromExcel(dto.File);
                 var minDate = dt.Compute("MIN(Date)",null).ToString();
-                dto.MinimumDate = DateTime.ParseExact(minDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+                // dto.MinimumDate = DateTime.ParseExact(minDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                dto.MinimumDate = DateTime.Parse(minDate);
                 var reviewsFromWeb = GetReviewsFromWeb(dto, reviewerId);
                 foreach (var review in reviewsFromWeb)
                 {
@@ -46,7 +61,7 @@ namespace AudibleHelper.API.Controllers
                     if(dataRow!=null)
                     {
                         var date = dataRow["Date"].ToString();
-                        var reviewDate = DateTime.ParseExact(date, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+                        var reviewDate = DateTime.Parse(date);
                         if(reviewDate == review.ReviewDate)
                         {
                             var revInDb = await _repo.GetReview(review.PenName,review.BookAsin,review.ReviewDate);
@@ -104,7 +119,7 @@ namespace AudibleHelper.API.Controllers
                     DateTime reviewDate;
                     if (dto.Country.ToLower() == "us")
                     {
-                        reviewDate = DateTime.ParseExact(date, "MM-dd-yy", CultureInfo.InvariantCulture);
+                        reviewDate = DateTime.Parse(date);
                     }
                     else
                     {
@@ -174,6 +189,19 @@ namespace AudibleHelper.API.Controllers
                 for (int rowNum = startRow; rowNum <= ws.Dimension.End.Row; rowNum++)
                 {
                     var wsRow = ws.Cells[rowNum, 1, rowNum, ws.Dimension.End.Column];
+                    ////checking if the cell value is whitespace
+                    var emtyRow = false;
+                    foreach (var cell in wsRow)
+                    {
+                        var name = cell.Text;
+                        if(string.IsNullOrWhiteSpace(name))
+                            emtyRow = true;
+                            break;
+                    }
+                    if(emtyRow)
+                        break;
+
+                    
                     DataRow row = dt.Rows.Add();
                     foreach (var cell in wsRow)
                     {
@@ -182,6 +210,23 @@ namespace AudibleHelper.API.Controllers
                 }
             }
             return dt;
+        }
+    
+        [HttpPost("DeleteReview")]
+        public async Task<IActionResult> DeleteReview(ReviewDetailDto dto)
+        {
+            int reviewerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var reviewInDb = await _repo.GetReview(dto.PenName, dto.BookAsin, dto.ReviewDate);
+            if(reviewerId != reviewInDb.ReviewerId)
+            {
+                return Unauthorized();
+            }
+            _repo.Delete(reviewInDb);
+            if(await _repo.SaveAll())
+            {
+                return Ok();
+            }
+            return BadRequest("Could not delete the review");
         }
     }
 }

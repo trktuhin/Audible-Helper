@@ -15,6 +15,14 @@ export class AlertifyService {
     });
   }
 
+  confirmWithTitle(title: string, message: string, okCallback: () => any) {
+    alertify.confirm(title, message, function(e) {
+      if (e) {
+        okCallback();
+      }
+    }, function(e) {});
+  }
+
   success(message: string) {
     alertify.success(message);
   }

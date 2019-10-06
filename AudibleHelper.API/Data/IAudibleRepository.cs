@@ -12,6 +12,7 @@ namespace AudibleHelper.API.Data
          void Delete<T>(T entity) where T:class;
          Task<bool> SaveAll();
          Task<PagedList<User>> GetUsers(UserParams userParams);
+         Task<PagedList<Review>> GetReviews(ReviewParams revParams);
          Task<User> GetUser(int id);
          Task<Photo> GetPhoto(int id);
          Task<Photo> GetMainPhoto(int userId);
