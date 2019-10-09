@@ -4,6 +4,8 @@ import { Pagination, PaginatedResult } from '../_models/pagination';
 import { ReviewService } from '../_services/review.service';
 import { AlertifyService } from '../_services/alertify.service';
 import { ActivatedRoute } from '@angular/router';
+import { BsDatepickerConfig } from 'ngx-bootstrap';
+import { User } from '../_models/user';
 
 @Component({
   selector: 'app-review-list',
@@ -14,6 +16,14 @@ export class ReviewListComponent implements OnInit {
   reviews: Review[];
   revParams: any = {};
   pagination: Pagination;
+  reviewerId = 0;
+  dateFrom: Date;
+  dateTo: Date;
+  bookAsin: string;
+  country = '';
+  user: User;
+  bsConfig: Partial<BsDatepickerConfig>;
+  countryList = [{value: '', display: 'All'}, {value: 'us', display: 'US'}, {value: 'uk', display: 'UK'}];
 
   constructor(
     private revService: ReviewService,
@@ -25,6 +35,13 @@ export class ReviewListComponent implements OnInit {
     this.route.data.subscribe(data => {
       this.reviews = data.reviews.result;
       this.pagination = data.reviews.pagination;
+      this.user = data.user;
+    });
+
+    this.route.params.subscribe(params => {
+      if (params.id) {
+          this.reviewerId = +params.id;
+      }
     });
   }
 
@@ -35,7 +52,12 @@ export class ReviewListComponent implements OnInit {
   loadReviews() {
     const revParam = {
       pageNumber: this.pagination.currentPage,
-      pageSize: 10
+      pageSize: 10,
+      reviewerId: this.reviewerId,
+      dateFrom: this.dateFrom,
+      dateTo: this.dateTo,
+      country: this.country,
+      bookAsin: this.bookAsin
     };
     this.revService
       .getReviews(revParam)
@@ -64,5 +86,12 @@ export class ReviewListComponent implements OnInit {
         }
       );
     });
+  }
+
+  resetFilters() {
+    this.bookAsin = '';
+    this.dateFrom = undefined;
+    this.dateTo = undefined;
+    this.country = '';
   }
 }

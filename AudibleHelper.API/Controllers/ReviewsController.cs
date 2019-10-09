@@ -18,6 +18,7 @@ using OfficeOpenXml;
 
 namespace AudibleHelper.API.Controllers
 {
+    [ServiceFilter(typeof(LoggedUserActivity))]
     [Route("api/[controller]")]
     [ApiController]
     public class ReviewsController : ControllerBase

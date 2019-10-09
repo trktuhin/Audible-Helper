@@ -1,0 +1,31 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">Edit {{session.name}}</h4>
+  <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form #rolesForm="ngForm" id="sessionForm">
+    <div class="form-group">
+      <input type="text" class="form-control ml-1" [(ngModel)]="session.name"
+      placeholder="Session Name"
+      name="sessionName">
+    </div>
+    <div class="form-group">
+      <input autocomplete="off" type="text" class="form-control ml-1" [(ngModel)]="session.startDate"
+            bsDatepicker
+            [bsConfig]="bsConfig"
+            name="dateFrom">
+    </div>
+    <div class="form-group">
+      <input autocomplete="off" type="text" class="form-control ml-1" [(ngModel)]="session.endDate"
+            bsDatepicker
+            [bsConfig]="bsConfig"
+            name="dateTo">
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">Cancel</button>
+  <button type="button" class="btn btn-success" (click)="update()" form="sessionForm">Submit</button>
+</div>

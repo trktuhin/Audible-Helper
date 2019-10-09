@@ -17,5 +17,6 @@ namespace AudibleHelper.API.Helpers
         public string BookAsin { get; set; }
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
+        public string Country { get; set; }
     }
 }

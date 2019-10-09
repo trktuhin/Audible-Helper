@@ -1,6 +1,6 @@
 <form [formGroup]="registerForm" (ngSubmit)="register()">
   <div class="form-group text-center">
-    <label class="control-label" style="margin-right:10px">Gender: </label>
+    <!-- <label class="control-label" style="margin-right:10px">Gender: </label> -->
     <label class="radio-inline">
       <input
         class="mr-3"
@@ -26,8 +26,8 @@
           registerForm.get('username').errors &&
           registerForm.get('username').touched
       }"
+      autocomplete="off"
       type="text"
-      id="userName"
       class="form-control"
       formControlName="username"
       placeholder="username"
@@ -46,6 +46,7 @@
       placeholder="Known as"
       formControlName="knownAs"
       id="knownAs"
+      autocomplete="off"
     />
     <div
       class="invalid-feedback"
@@ -112,7 +113,7 @@
           registerForm.get('country').touched
       }"
       class="form-control"
-      placeholder="Country"
+      placeholder="Country "
       formControlName="country"
     />
     <div

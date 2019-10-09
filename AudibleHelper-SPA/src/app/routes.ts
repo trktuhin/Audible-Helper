@@ -15,6 +15,7 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
 import { ReviewListComponent } from './review-list/review-list.component';
 import { ReviewListResolver } from './_resolvers/review-list.resolver';
 import { FetchReviewComponent } from './fetch-review/fetch-review.component';
+import { UserKnownAsResolver } from './_resolvers/userKnownAs.resolver';
 
 export const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -31,6 +32,8 @@ export const appRoutes: Routes = [
       {path: 'messages', component: MessagesComponent, resolve: {messages: MessagesResolver}},
       {path: 'admin', component: AdminPanelComponent, data: { roles: ['Admin', 'Moderator'] }},
       {path: 'reviews/add', component: FetchReviewComponent},
+      {path: 'reviews/:id', component: ReviewListComponent, data: { roles: ['Admin', 'Moderator'] },
+        resolve: {reviews: ReviewListResolver, user: UserKnownAsResolver}},
       {path: 'reviews', component: ReviewListComponent, resolve: {reviews: ReviewListResolver}}
     ]
   },

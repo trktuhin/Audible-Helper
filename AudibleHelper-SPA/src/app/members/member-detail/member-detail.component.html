@@ -26,7 +26,7 @@
         </div>
         <div class="card-footer" *appHasRole="['Admin']">
           <div class="btn-group d-flex" >
-            <button class="btn btn-primary w-100">Records</button>
+            <button class="btn btn-primary w-100" [routerLink]="['/reviews',user.id]" routerLinkActive="router-link-active" >Records</button>
             <button class="btn btn-success w-100" (click)="selectTab(2)">Message</button>
           </div>
         </div>

@@ -4,6 +4,7 @@ import { AdminService } from 'src/app/_services/admin.service';
 import { AlertifyService } from 'src/app/_services/alertify.service';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap';
 import { RolesModalComponent } from '../roles-modal/roles-modal.component';
+import { UserService } from 'src/app/_services/user.service';
 
 @Component({
   selector: 'app-user-management',
@@ -14,6 +15,7 @@ export class UserManagementComponent implements OnInit {
   users: User[];
   bsModalRef: BsModalRef;
   constructor(private adminService: AdminService,
+              private userService: UserService,
               private alertify: AlertifyService,
               private modalService: BsModalService) { }
 
@@ -38,7 +40,7 @@ export class UserManagementComponent implements OnInit {
       const rolesToUpdate = {
         roleNames: [...values.filter(el => el.checked === true).map(el => el.name)]
       };
-      if(rolesToUpdate) {
+      if (rolesToUpdate) {
         this.adminService.updateUserRoles(user, rolesToUpdate).subscribe(() => {
           user.roles = [...rolesToUpdate.roleNames];
         }, err => {
@@ -75,6 +77,18 @@ export class UserManagementComponent implements OnInit {
       }
     }
     return roles;
+  }
+
+  deleteUser(id: number) {
+    this.alertify.confirmWithTitle('Are you sure to delete this user?',
+    'This will be permanently deleted if you click Ok', () => {
+      this.userService.deleteUser(id).subscribe(() => {
+        this.getUsersWithRoles();
+        this.alertify.success('User was deleted');
+      }, err => {
+        this.alertify.error(err);
+      });
+    });
   }
 
 }

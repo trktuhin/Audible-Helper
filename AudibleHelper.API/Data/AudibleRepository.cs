@@ -88,13 +88,17 @@ namespace AudibleHelper.API.Data
             {
                 reviews = reviews.Where(rev => rev.ReviewDate >= revParams.DateFrom);
             }
-            if(revParams.DateTo != null && revParams.DateFrom != DateTime.MinValue)
+            if(revParams.DateTo != null && revParams.DateTo != DateTime.MinValue)
             {
                 reviews = reviews.Where(rev => rev.ReviewDate <= revParams.DateTo);
             }
             if(!string.IsNullOrWhiteSpace(revParams.BookAsin))
             {
                 reviews = reviews.Where(rev => rev.BookAsin == revParams.BookAsin);
+            }
+            if(!string.IsNullOrWhiteSpace(revParams.Country))
+            {
+                reviews = reviews.Where(rev => rev.Country.ToLower() == revParams.Country.ToLower());
             }
             reviews = reviews.OrderByDescending(rev => rev.ReviewDate);
             return await PagedList<Review>.CreateAsync(reviews, revParams.PageNumber, revParams.PageSize);
@@ -154,6 +158,17 @@ namespace AudibleHelper.API.Data
                         && rev.BookAsin == bookAsin && rev.ReviewDate == reviewDate);
         }
 
+        public async Task<IEnumerable<Session>> GetSessions()
+        {
+            var sessions = await _context.Sessions.OrderByDescending(s => s.CreatedOn).ToListAsync();
+            return sessions;
+        }
+
+        public async Task<Session> GetSession(int id)
+        {
+            var session = await _context.Sessions.SingleOrDefaultAsync(s => s.Id == id);
+            return session;
+        }
         
     }
 }

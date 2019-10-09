@@ -1,15 +1,50 @@
-<div *ngIf="pagination.totalItems>0">
   <div class="row">
     <div class="col-12 text-center mt-3">
-      <h2>{{pagination.totalItems}} reviews found
+      <h2>{{pagination.totalItems}} reviews found <span *ngIf="user">for {{user.knownAs}} </span>
         <span>
             <a [routerLink]="['/reviews/add']" routerLinkActive="router-link-active"  class="btn btn-primary roudedBtn">Add Reviews</a>
         </span>
       </h2>
     </div>
+
   </div>
 
   <div class="container">
+      <form class="form-inline" #form="ngForm" (ngSubmit)="loadReviews()" novalidate>
+          <div class="form-group">
+            <label for="dateFrom">Date From</label>
+            <input autocomplete="off" type="text" class="form-control ml-1" [(ngModel)]="dateFrom"
+            bsDatepicker
+            [bsConfig]="bsConfig"
+            style="width: 150px" id="dateFrom" name="dateFrom">
+          </div>
+
+          <div class="form-group ml-1">
+              <label for="dateTo">Date To</label>
+              <input autocomplete="off" type="text" class="form-control ml-1" [(ngModel)]="dateTo"
+              bsDatepicker
+              [bsConfig]="bsConfig"
+              style="width: 150px" id="dateTo" name="dateTo">
+            </div>
+
+          <div class="form-group ml-1">
+            <label for="country">Country</label>
+            <select class="form-control ml-1" style="width: 100px" [(ngModel)]="country" id="country" name="country">
+              <option *ngFor="let country of countryList" [value]="country.value">
+                {{country.display}}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group ml-1">
+            <label for="bookAsin">Book Asin</label>
+            <input type="text" class="form-control ml-1" style="width: 150px" [(ngModel)]="bookAsin" id="bookAsin" name="knownAs">
+          </div>
+
+          <button type="submit" class="btn btn-success" style="margin-left:10px">Apply Filters</button>
+          <button type="button" (click)="resetFilters()" class="btn btn-info" style="margin-left:10px">Reset Filter</button>
+        </form>
+        <br>
     <div class="row">
       <table class="table">
         <tr>
@@ -39,8 +74,4 @@
     previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"
     [maxSize]="5" [rotate]="false"></pagination>
   </div>
-</div>
-<div *ngIf="pagination.totalItems==0" class="text-center mt-3">
-  <h2>No reviews found</h2>
-</div>
 

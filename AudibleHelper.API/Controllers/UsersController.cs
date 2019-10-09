@@ -85,5 +85,21 @@ namespace AudibleHelper.API.Controllers
                 return BadRequest("Could not change password");
             }
         }
+
+        [HttpPost("DeleteUser/{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            var userFromRepo = await _repo.GetUser(id);
+            if(userFromRepo == null)
+            {
+                return NotFound();
+            }
+            var result = await _userManager.DeleteAsync(userFromRepo);
+            if(result.Succeeded)
+            {
+                return Ok();
+            }
+            return BadRequest("Could not delete user");
+        }
     }
 }

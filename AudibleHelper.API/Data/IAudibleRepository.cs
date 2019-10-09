@@ -20,5 +20,7 @@ namespace AudibleHelper.API.Data
          Task<PagedList<Message>> GetMessagesForUser(MessageParams messageParams);
          Task<IEnumerable<Message>> GetMessageThread(int userId, int recipientId);
          Task<Review> GetReview(string penName, string bookAsin, DateTime reviewDate);
+         Task<IEnumerable<Session>> GetSessions();
+         Task<Session> GetSession(int id);
     }
 }

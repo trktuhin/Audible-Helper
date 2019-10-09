@@ -42,6 +42,9 @@ import { ReviewListComponent } from './review-list/review-list.component';
 import { ReviewService } from './_services/review.service';
 import { ReviewListResolver } from './_resolvers/review-list.resolver';
 import { FetchReviewComponent } from './fetch-review/fetch-review.component';
+import { UserKnownAsResolver } from './_resolvers/userKnownAs.resolver';
+import { SessionManagementComponent } from './admin/session-management/session-management.component';
+import { SessionModalComponent } from './admin/session-modal/session-modal.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -67,7 +70,9 @@ export function tokenGetter() {
       RolesModalComponent,
       ChangePasswordComponent,
       ReviewListComponent,
-      FetchReviewComponent
+      FetchReviewComponent,
+      SessionManagementComponent,
+      SessionModalComponent
    ],
    imports: [
       BrowserModule,
@@ -104,10 +109,12 @@ export function tokenGetter() {
       MessagesResolver,
       AdminService,
       ReviewService,
-      ReviewListResolver
+      ReviewListResolver,
+      UserKnownAsResolver
    ],
    entryComponents: [
-    RolesModalComponent
+    RolesModalComponent,
+    SessionModalComponent
    ],
    bootstrap: [
       AppComponent

@@ -14,6 +14,9 @@ namespace AudibleHelper.API.Data
         public DbSet<Photo> Photos{get;set;}
         public DbSet<Message> Messages { get; set; }
         public DbSet<Review> Reviews { get; set; }
+        public DbSet<Session> Sessions { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

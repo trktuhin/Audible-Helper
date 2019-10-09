@@ -29,6 +29,7 @@ namespace AudibleHelper.API.Helpers
             CreateMap<Photo, PhotoForReturnDto>();
             CreateMap<PhotoForCreationDto, Photo>();
             CreateMap<UserForRegisterDto, User>();
+            CreateMap<SessionForCreationDto, Session>();
             CreateMap<MessageForCreationDto, Message>().ReverseMap();
             CreateMap<Message, MessageToReturnDto>()
                 .ForMember(m => m.SenderPhotoUrl, opt => 
