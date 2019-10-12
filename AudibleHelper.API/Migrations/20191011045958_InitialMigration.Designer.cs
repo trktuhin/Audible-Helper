@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DatingApp.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20190922121810_AddingCountryToReview")]
-    partial class AddingCountryToReview
+    [Migration("20191011045958_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -48,6 +48,28 @@ namespace DatingApp.API.Migrations
                     b.ToTable("Messages");
                 });
 
+            modelBuilder.Entity("AudibleHelper.API.Models.Payment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("IsReceived");
+
+                    b.Property<int>("MemberId");
+
+                    b.Property<int>("SessionId");
+
+                    b.Property<float>("TotalAmountInTaka");
+
+                    b.Property<float>("TotalReviews");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SessionId");
+
+                    b.ToTable("Payments");
+                });
+
             modelBuilder.Entity("AudibleHelper.API.Models.Photo", b =>
                 {
                     b.Property<int>("Id")
@@ -80,13 +102,15 @@ namespace DatingApp.API.Migrations
 
                     b.Property<DateTime>("ReviewDate");
 
-                    b.Property<string>("Country");
-
                     b.Property<string>("ReviewTitle");
+
+                    b.Property<string>("Country");
 
                     b.Property<int>("ReviewerId");
 
-                    b.HasKey("PenName", "BookAsin", "ReviewDate");
+                    b.HasKey("PenName", "BookAsin", "ReviewDate", "ReviewTitle");
+
+                    b.HasIndex("ReviewerId");
 
                     b.ToTable("Reviews");
                 });
@@ -112,6 +136,26 @@ namespace DatingApp.API.Migrations
                         .HasName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles");
+                });
+
+            modelBuilder.Entity("AudibleHelper.API.Models.Session", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CreatedBy");
+
+                    b.Property<DateTime>("CreatedOn");
+
+                    b.Property<DateTime>("EndDate");
+
+                    b.Property<string>("Name");
+
+                    b.Property<DateTime>("StartDate");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Sessions");
                 });
 
             modelBuilder.Entity("AudibleHelper.API.Models.User", b =>
@@ -276,11 +320,27 @@ namespace DatingApp.API.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
+            modelBuilder.Entity("AudibleHelper.API.Models.Payment", b =>
+                {
+                    b.HasOne("AudibleHelper.API.Models.Session", "Session")
+                        .WithMany()
+                        .HasForeignKey("SessionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("AudibleHelper.API.Models.Photo", b =>
                 {
                     b.HasOne("AudibleHelper.API.Models.User", "User")
                         .WithMany("Photos")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("AudibleHelper.API.Models.Review", b =>
+                {
+                    b.HasOne("AudibleHelper.API.Models.User", "Reviewer")
+                        .WithMany()
+                        .HasForeignKey("ReviewerId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

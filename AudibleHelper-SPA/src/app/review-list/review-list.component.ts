@@ -6,11 +6,13 @@ import { AlertifyService } from '../_services/alertify.service';
 import { ActivatedRoute } from '@angular/router';
 import { BsDatepickerConfig } from 'ngx-bootstrap';
 import { User } from '../_models/user';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-review-list',
   templateUrl: './review-list.component.html',
-  styleUrls: ['./review-list.component.css']
+  styleUrls: ['./review-list.component.css'],
+  providers: [DatePipe]
 })
 export class ReviewListComponent implements OnInit {
   reviews: Review[];
@@ -22,13 +24,15 @@ export class ReviewListComponent implements OnInit {
   bookAsin: string;
   country = '';
   user: User;
+  penName = '';
   bsConfig: Partial<BsDatepickerConfig>;
   countryList = [{value: '', display: 'All'}, {value: 'us', display: 'US'}, {value: 'uk', display: 'UK'}];
 
   constructor(
     private revService: ReviewService,
     private alertify: AlertifyService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private datePipe: DatePipe
   ) {}
 
   ngOnInit() {
@@ -43,6 +47,8 @@ export class ReviewListComponent implements OnInit {
           this.reviewerId = +params.id;
       }
     });
+    this.dateFrom = new Date();
+    this.dateTo = new Date();
   }
 
   pageChanged(event: any): void {
@@ -54,10 +60,11 @@ export class ReviewListComponent implements OnInit {
       pageNumber: this.pagination.currentPage,
       pageSize: 10,
       reviewerId: this.reviewerId,
-      dateFrom: this.dateFrom,
-      dateTo: this.dateTo,
+      dateFrom: this.datePipe.transform(this.dateFrom, 'MM/dd/yyyy'),
+      dateTo: this.datePipe.transform(this.dateTo, 'MM/dd/yyyy'),
       country: this.country,
-      bookAsin: this.bookAsin
+      bookAsin: this.bookAsin,
+      penName: this.penName
     };
     this.revService
       .getReviews(revParam)
@@ -70,6 +77,7 @@ export class ReviewListComponent implements OnInit {
           this.alertify.error(error);
         }
       );
+    console.log(this.dateFrom);
   }
 
   deleteReview(review: Review) {

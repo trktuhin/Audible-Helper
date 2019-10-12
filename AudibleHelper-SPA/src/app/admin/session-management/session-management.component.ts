@@ -11,8 +11,8 @@ import { SessionModalComponent } from '../session-modal/session-modal.component'
   styleUrls: ['./session-management.component.css']
 })
 export class SessionManagementComponent implements OnInit {
-  startDate: Date;
-  endDate: Date;
+  startDate = new Date();
+  endDate = new Date();
   name = '';
   bsConfig: Partial<BsDatepickerConfig>;
   sessions: Session[] = [];

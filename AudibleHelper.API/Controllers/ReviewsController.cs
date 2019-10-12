@@ -35,11 +35,21 @@ namespace AudibleHelper.API.Controllers
         public async Task<IActionResult> GetReviews(ReviewParams revParams)
         {
             var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            if(revParams.SessionId !=0 && revParams.SessionId != -1)
+            {
+                var session = await _repo.GetSession(revParams.SessionId);
+                if(session != null)
+                {
+                    revParams.DateFrom = session.StartDate;
+                    revParams.DateTo = session.EndDate;
+                }
+            }
             if(revParams.ReviewerId == 0)
             {
                 revParams.ReviewerId = currentUserId;
             }
             var reviews = await _repo.GetReviews(revParams);
+            
             Response.AddPagination(reviews.CurrentPage,reviews.PageSize,reviews.TotalCount,reviews.TotalPages);
             return Ok(reviews);
         }
@@ -65,7 +75,7 @@ namespace AudibleHelper.API.Controllers
                         var reviewDate = DateTime.Parse(date);
                         if(reviewDate == review.ReviewDate)
                         {
-                            var revInDb = await _repo.GetReview(review.PenName,review.BookAsin,review.ReviewDate);
+                            var revInDb = await _repo.GetReview(review.PenName,review.BookAsin,review.ReviewDate,review.ReviewTitle);
                             if(revInDb==null)
                             {
                                 _repo.Add(review);
@@ -217,7 +227,7 @@ namespace AudibleHelper.API.Controllers
         public async Task<IActionResult> DeleteReview(ReviewDetailDto dto)
         {
             int reviewerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var reviewInDb = await _repo.GetReview(dto.PenName, dto.BookAsin, dto.ReviewDate);
+            var reviewInDb = await _repo.GetReview(dto.PenName, dto.BookAsin, dto.ReviewDate, dto.ReviewTitle);
             if(reviewerId != reviewInDb.ReviewerId)
             {
                 return Unauthorized();

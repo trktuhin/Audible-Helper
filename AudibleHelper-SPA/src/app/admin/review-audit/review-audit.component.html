@@ -1,0 +1,70 @@
+<div>
+  <form class="form-inline" #form="ngForm" (ngSubmit)="loadReviews()" novalidate>
+    <div class="form-group ml-1">
+      <label for="member">Member</label>
+      <select class="form-control ml-1" style="width: 200px" [(ngModel)]="userId" id="member" name="member">
+        <option value="-1">All</option>
+        <option *ngFor="let user of users" [value]="user.id">
+          {{user.knownAs}}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group ml-1">
+      <label for="session">Session</label>
+      <select class="form-control ml-1" style="width: 200px" [(ngModel)]="sessionId" id="session" name="session">
+        <option value="-1">All</option>
+        <option *ngFor="let session of sessions" [value]="session.id">
+          {{session.name}}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group ml-1">
+      <label for="bookAsin">Book Asin</label>
+      <input type="text" class="form-control ml-1" style="width: 150px" [(ngModel)]="bookAsin" id="bookAsin" name="knownAs">
+    </div>
+
+    <div class="form-group ml-1">
+      <label for="country">Country</label>
+      <select class="form-control ml-1" style="width: 100px" [(ngModel)]="country" id="country" name="country">
+        <option *ngFor="let country of countryList" [value]="country.value">
+          {{country.display}}
+        </option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-info" style="margin-left:10px"><i class="fa fa-search-minus"></i></button>
+    <span class="ml-2">Total: {{pagination.totalItems}}</span>
+  </form>
+  <br>
+  <div class="row">
+    <table class="table">
+      <tr>
+        <th style="width: 15%">Pen Name</th>
+        <th style="width: 50%">Review Title</th>
+        <th style="width: 10%">Date</th>
+        <th style="width: 10%">Book Asin</th>
+        <th style="width: 5%">Country</th>
+        <th style="width: 10%">Reviewer</th>
+      </tr>
+      <tr *ngFor="let review of reviews">
+        <td>{{review.penName}}</td>
+        <td>{{review.reviewTitle}}</td>
+        <td>{{review.reviewDate|date:'mediumDate'}}</td>
+        <td>{{review.bookAsin}}</td>
+        <td>{{review.country|uppercase}}</td>
+        <td>{{review.reviewer.knownAs}}</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div class="d-flex justify-content-center">
+  <pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems"
+  [(ngModel)]="pagination.currentPage" [itemsPerPage]="pagination.itemsPerPage"
+  (pageChanged)="pageChanged($event)"
+  previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"
+  [maxSize]="5" [rotate]="false"></pagination>
+</div>
+

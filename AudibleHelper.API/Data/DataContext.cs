@@ -21,7 +21,7 @@ namespace AudibleHelper.API.Data
         {
             base.OnModelCreating(builder);
             builder.Entity<Review>(review => {
-                review.HasKey( rev => new {rev.PenName, rev.BookAsin, rev.ReviewDate});
+                review.HasKey( rev => new {rev.PenName, rev.BookAsin, rev.ReviewDate, rev.ReviewTitle});
             });
             builder.Entity<UserRole>(userRole => {
                 userRole.HasKey(ur => new {ur.UserId, ur.RoleId});

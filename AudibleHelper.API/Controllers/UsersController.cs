@@ -13,7 +13,7 @@ using AudibleHelper.API.Models;
 namespace AudibleHelper.API.Controllers
 {
 
-    [ServiceFilter(typeof(LoggedUserActivity))]
+    // [ServiceFilter(typeof(LoggedUserActivity))]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -90,6 +90,11 @@ namespace AudibleHelper.API.Controllers
         public async Task<IActionResult> DeleteUser(int id)
         {
             var userFromRepo = await _repo.GetUser(id);
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            if(userId == id)
+            {
+                return BadRequest("You can not delete yourself");
+            }
             if(userFromRepo == null)
             {
                 return NotFound();
@@ -100,6 +105,13 @@ namespace AudibleHelper.API.Controllers
                 return Ok();
             }
             return BadRequest("Could not delete user");
+        }
+
+        [HttpGet("GetAllUser")]
+        public async Task<IActionResult> GetAllUser()
+        {
+            var users = await _repo.GetAllUsers();
+            return Ok(users);
         }
     }
 }

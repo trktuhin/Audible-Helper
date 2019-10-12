@@ -16,6 +16,7 @@ import { ReviewListComponent } from './review-list/review-list.component';
 import { ReviewListResolver } from './_resolvers/review-list.resolver';
 import { FetchReviewComponent } from './fetch-review/fetch-review.component';
 import { UserKnownAsResolver } from './_resolvers/userKnownAs.resolver';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 export const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -25,6 +26,8 @@ export const appRoutes: Routes = [
     canActivate: [AuthGuard],
     children: [
       {path: 'changePassword', component: ChangePasswordComponent},
+      {path: 'dashboard', component: DashboardComponent, resolve: {reviews: ReviewListResolver}
+      , data: { roles: ['Admin', 'Moderator'] }},
       {path: 'members', component: MemberListComponent, resolve: {users: MemberListResolver}},
       {path: 'members/:id', component: MemberDetailComponent, resolve: {user: MemberDetailResolver}},
       {path: 'member/edit', component: MemberEditComponent, resolve: {user: MemberEditResolver},

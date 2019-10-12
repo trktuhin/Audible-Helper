@@ -3,6 +3,7 @@ import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Session } from '../_models/session';
 import { Observable } from 'rxjs';
+import { DatePipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -10,9 +11,11 @@ import { Observable } from 'rxjs';
 export class SessionService {
 baseUrl = environment.apiUrl;
 
-constructor(private http: HttpClient) { }
+constructor(private http: HttpClient, private datePipe: DatePipe) { }
 
-addSession(startDate: Date, endDate: Date, name: string) {
+addSession(StartDate: Date, EndDate: Date, name: string) {
+  const startDate = this.datePipe.transform(StartDate, 'MM/dd/yyyy');
+  const endDate = this.datePipe.transform(EndDate, 'MM/dd/yyyy');
   return  this.http.post(this.baseUrl + 'session', {startDate, endDate, name});
 }
 

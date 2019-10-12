@@ -26,7 +26,9 @@ export class ReviewListResolver implements Resolve<Review[]> {
     return this.revService.getReviews({
       pageNumber: this.pageNumber,
       pageSize: this.pageSize,
-      reviewerId
+      reviewerId,
+      dateFrom: new Date(),
+      dateTo: new Date()
     }).pipe(
       catchError( error => {
         this.alertify.error(error);

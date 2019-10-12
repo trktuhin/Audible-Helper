@@ -100,13 +100,15 @@ namespace DatingApp.API.Migrations
 
                     b.Property<DateTime>("ReviewDate");
 
-                    b.Property<string>("Country");
-
                     b.Property<string>("ReviewTitle");
+
+                    b.Property<string>("Country");
 
                     b.Property<int>("ReviewerId");
 
-                    b.HasKey("PenName", "BookAsin", "ReviewDate");
+                    b.HasKey("PenName", "BookAsin", "ReviewDate", "ReviewTitle");
+
+                    b.HasIndex("ReviewerId");
 
                     b.ToTable("Reviews");
                 });
@@ -329,6 +331,14 @@ namespace DatingApp.API.Migrations
                     b.HasOne("AudibleHelper.API.Models.User", "User")
                         .WithMany("Photos")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("AudibleHelper.API.Models.Review", b =>
+                {
+                    b.HasOne("AudibleHelper.API.Models.User", "Reviewer")
+                        .WithMany()
+                        .HasForeignKey("ReviewerId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

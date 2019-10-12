@@ -42,7 +42,8 @@ namespace AudibleHelper.API.Data
                 }
                 var adminUser = new User
                 {
-                    UserName = "Admin"
+                    UserName = "Admin",
+                    KnownAs = "Admin"
                 };
                 IdentityResult result = _userManager.CreateAsync(adminUser, "password").Result;
                 if(result.Succeeded)

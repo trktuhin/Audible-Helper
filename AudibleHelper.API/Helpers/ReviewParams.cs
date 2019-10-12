@@ -18,5 +18,7 @@ namespace AudibleHelper.API.Helpers
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
         public string Country { get; set; }
+        public int SessionId { get; set; }
+        public string PenName { get; set; }
     }
 }

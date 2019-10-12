@@ -45,6 +45,9 @@ import { FetchReviewComponent } from './fetch-review/fetch-review.component';
 import { UserKnownAsResolver } from './_resolvers/userKnownAs.resolver';
 import { SessionManagementComponent } from './admin/session-management/session-management.component';
 import { SessionModalComponent } from './admin/session-modal/session-modal.component';
+import { ReviewAuditComponent } from './admin/review-audit/review-audit.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { DatePipe } from '@angular/common';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -72,7 +75,9 @@ export function tokenGetter() {
       ReviewListComponent,
       FetchReviewComponent,
       SessionManagementComponent,
-      SessionModalComponent
+      SessionModalComponent,
+      ReviewAuditComponent,
+      DashboardComponent
    ],
    imports: [
       BrowserModule,
@@ -110,7 +115,8 @@ export function tokenGetter() {
       AdminService,
       ReviewService,
       ReviewListResolver,
-      UserKnownAsResolver
+      UserKnownAsResolver,
+      DatePipe
    ],
    entryComponents: [
     RolesModalComponent,

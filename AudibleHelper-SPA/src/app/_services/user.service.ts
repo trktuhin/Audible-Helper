@@ -118,4 +118,8 @@ export class UserService {
   deleteUser(id: number) {
     return this.http.post(this.baseUrl + 'users/deleteUser/' + id, {});
   }
+
+  getAllUser() {
+    return this.http.get<User[]>(this.baseUrl + 'users/getalluser');
+  }
 }

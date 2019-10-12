@@ -12,6 +12,7 @@ namespace AudibleHelper.API.Data
          void Delete<T>(T entity) where T:class;
          Task<bool> SaveAll();
          Task<PagedList<User>> GetUsers(UserParams userParams);
+         Task<List<User>> GetAllUsers();
          Task<PagedList<Review>> GetReviews(ReviewParams revParams);
          Task<User> GetUser(int id);
          Task<Photo> GetPhoto(int id);
@@ -19,7 +20,7 @@ namespace AudibleHelper.API.Data
          Task<Message> GetMessage(int id);
          Task<PagedList<Message>> GetMessagesForUser(MessageParams messageParams);
          Task<IEnumerable<Message>> GetMessageThread(int userId, int recipientId);
-         Task<Review> GetReview(string penName, string bookAsin, DateTime reviewDate);
+         Task<Review> GetReview(string penName, string bookAsin, DateTime reviewDate, string reviewTitle);
          Task<IEnumerable<Session>> GetSessions();
          Task<Session> GetSession(int id);
     }

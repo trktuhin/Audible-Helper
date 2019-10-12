@@ -77,10 +77,15 @@ namespace AudibleHelper.API.Data
             return await PagedList<User>.CreateAsync(users, userParams.PageNumber, userParams.PageSize);
         }
 
+        public async Task<List<User>> GetAllUsers()
+        {
+            var users = await _context.Users.ToListAsync();
+            return users;
+        }
         public async Task<PagedList<Review>> GetReviews(ReviewParams revParams)
         {
-            var reviews = _context.Reviews.AsQueryable();
-            if(revParams.ReviewerId != 0)
+            var reviews = _context.Reviews.Include(rev => rev.Reviewer).AsQueryable();
+            if(revParams.ReviewerId != 0 && revParams.ReviewerId != -1)
             {
                 reviews = reviews.Where(rev => rev.ReviewerId == revParams.ReviewerId);
             }
@@ -99,6 +104,10 @@ namespace AudibleHelper.API.Data
             if(!string.IsNullOrWhiteSpace(revParams.Country))
             {
                 reviews = reviews.Where(rev => rev.Country.ToLower() == revParams.Country.ToLower());
+            }
+            if(!string.IsNullOrWhiteSpace(revParams.PenName))
+            {
+                reviews = reviews.Where(rev => rev.PenName.ToLower().Contains(revParams.PenName.ToLower()));
             }
             reviews = reviews.OrderByDescending(rev => rev.ReviewDate);
             return await PagedList<Review>.CreateAsync(reviews, revParams.PageNumber, revParams.PageSize);
@@ -152,10 +161,11 @@ namespace AudibleHelper.API.Data
             return messages;
         }
 
-        public async Task<Review> GetReview(string penName, string bookAsin, DateTime reviewDate)
+        public async Task<Review> GetReview(string penName, string bookAsin, DateTime reviewDate, string reviewTitle)
         {
             return await _context.Reviews.FirstOrDefaultAsync(rev => rev.PenName == penName 
-                        && rev.BookAsin == bookAsin && rev.ReviewDate == reviewDate);
+                        && rev.BookAsin == bookAsin && rev.ReviewDate == reviewDate 
+                        && rev.ReviewTitle == reviewTitle);
         }
 
         public async Task<IEnumerable<Session>> GetSessions()

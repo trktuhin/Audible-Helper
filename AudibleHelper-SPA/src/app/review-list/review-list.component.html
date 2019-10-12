@@ -38,11 +38,14 @@
 
           <div class="form-group ml-1">
             <label for="bookAsin">Book Asin</label>
-            <input type="text" class="form-control ml-1" style="width: 150px" [(ngModel)]="bookAsin" id="bookAsin" name="knownAs">
+            <input type="text" class="form-control ml-1" style="width: 150px" [(ngModel)]="bookAsin" id="bookAsin" name="bookAsin">
           </div>
 
-          <button type="submit" class="btn btn-success" style="margin-left:10px">Apply Filters</button>
-          <button type="button" (click)="resetFilters()" class="btn btn-info" style="margin-left:10px">Reset Filter</button>
+          <div class="form-group ml-1">
+            <label for="penName">Pen name</label>
+            <input type="text" class="form-control ml-1" style="width: 150px" [(ngModel)]="penName" id="penName" name="penName">
+          </div>
+          <button type="submit" class="btn btn-info" style="margin-left:10px"><i class="fa fa-search-minus"></i></button>
         </form>
         <br>
     <div class="row">
