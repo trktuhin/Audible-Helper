@@ -181,6 +181,33 @@ namespace DatingApp.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Assignments",
+                columns: table => new
+                {
+                    BookAsin = table.Column<string>(nullable: false),
+                    AssignedDate = table.Column<DateTime>(nullable: false),
+                    AssignedToId = table.Column<int>(nullable: false),
+                    StartingRating = table.Column<int>(nullable: false),
+                    TotalCodes = table.Column<int>(nullable: false),
+                    IsDeleted = table.Column<bool>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    LastModifiedBy = table.Column<string>(nullable: true),
+                    LastModifiedOn = table.Column<DateTime>(nullable: false),
+                    Country = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Assignments", x => new { x.BookAsin, x.AssignedDate, x.AssignedToId, x.StartingRating });
+                    table.ForeignKey(
+                        name: "FK_Assignments_AspNetUsers_AssignedToId",
+                        column: x => x.AssignedToId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Messages",
                 columns: table => new
                 {
@@ -319,6 +346,11 @@ namespace DatingApp.API.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Assignments_AssignedToId",
+                table: "Assignments",
+                column: "AssignedToId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Messages_RecipientId",
                 table: "Messages",
                 column: "RecipientId");
@@ -360,6 +392,9 @@ namespace DatingApp.API.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Assignments");
 
             migrationBuilder.DropTable(
                 name: "Messages");

@@ -16,6 +16,37 @@ namespace DatingApp.API.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.0-rtm-35687");
 
+            modelBuilder.Entity("AudibleHelper.API.Models.Assignment", b =>
+                {
+                    b.Property<string>("BookAsin");
+
+                    b.Property<DateTime>("AssignedDate");
+
+                    b.Property<int>("AssignedToId");
+
+                    b.Property<int>("StartingRating");
+
+                    b.Property<string>("Country");
+
+                    b.Property<string>("CreatedBy");
+
+                    b.Property<DateTime>("CreatedOn");
+
+                    b.Property<bool>("IsDeleted");
+
+                    b.Property<string>("LastModifiedBy");
+
+                    b.Property<DateTime>("LastModifiedOn");
+
+                    b.Property<int>("TotalCodes");
+
+                    b.HasKey("BookAsin", "AssignedDate", "AssignedToId", "StartingRating");
+
+                    b.HasIndex("AssignedToId");
+
+                    b.ToTable("Assignments");
+                });
+
             modelBuilder.Entity("AudibleHelper.API.Models.Message", b =>
                 {
                     b.Property<int>("Id")
@@ -303,6 +334,14 @@ namespace DatingApp.API.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("AudibleHelper.API.Models.Assignment", b =>
+                {
+                    b.HasOne("AudibleHelper.API.Models.User", "AssignedTo")
+                        .WithMany()
+                        .HasForeignKey("AssignedToId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("AudibleHelper.API.Models.Message", b =>

@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { PaginatedResult } from '../_models/pagination';
 import { Review } from '../_models/review';
 import { map } from 'rxjs/operators';
+import { DatePipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ import { map } from 'rxjs/operators';
 export class ReviewService {
 baseUrl = environment.apiUrl;
 
-constructor(private http: HttpClient) { }
+constructor(private http: HttpClient, private datePipe: DatePipe) { }
 
 getReviews(revParams): Observable<PaginatedResult<Review[]>> {
   const paginatedResult: PaginatedResult<Review[]> = new PaginatedResult<Review[]>();
@@ -41,6 +42,12 @@ getReviews(revParams): Observable<PaginatedResult<Review[]>> {
     formData.append('Country', country);
     formData.append('BookAsin', bookAsin);
     return this.http.post(this.baseUrl + 'Reviews', formData);
+  }
+
+  addReviewByDate(bookAsin: string, country: string, minimumDate: Date) {
+    const minDate = this.datePipe.transform(minimumDate, 'MM/dd/yyyy');
+    return this.http.post(this.baseUrl + 'Reviews/AddReviewByDate',
+    {bookAsin, country, minimumDate: minDate});
   }
 
   deleteReview(review: Review) {

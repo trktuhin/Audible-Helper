@@ -17,6 +17,9 @@ import { ReviewListResolver } from './_resolvers/review-list.resolver';
 import { FetchReviewComponent } from './fetch-review/fetch-review.component';
 import { UserKnownAsResolver } from './_resolvers/userKnownAs.resolver';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { AssignmentListComponent } from './assignment/assignment-list/assignment-list.component';
+import { AssignmentListResolver } from './_resolvers/assignment-list.resolver';
+import { AddAssignmentComponent } from './assignment/add-assignment/add-assignment.component';
 
 export const appRoutes: Routes = [
   {path: '', component: HomeComponent},
@@ -37,7 +40,9 @@ export const appRoutes: Routes = [
       {path: 'reviews/add', component: FetchReviewComponent},
       {path: 'reviews/:id', component: ReviewListComponent, data: { roles: ['Admin', 'Moderator'] },
         resolve: {reviews: ReviewListResolver, user: UserKnownAsResolver}},
-      {path: 'reviews', component: ReviewListComponent, resolve: {reviews: ReviewListResolver}}
+      {path: 'reviews', component: ReviewListComponent, resolve: {reviews: ReviewListResolver}},
+      {path: 'assignments/add', component: AddAssignmentComponent},
+      {path: 'assignments', component: AssignmentListComponent, resolve: {reviews: AssignmentListResolver}}
     ]
   },
 

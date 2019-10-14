@@ -53,6 +53,34 @@ namespace AudibleHelper.API.Controllers
             Response.AddPagination(reviews.CurrentPage,reviews.PageSize,reviews.TotalCount,reviews.TotalPages);
             return Ok(reviews);
         }
+        [HttpPost("AddReviewByDate")]
+        public async Task<IActionResult> AddReviewsByDate(ReviewForCreationDto dto)
+        {
+            int reviewerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            try
+            {
+                var reviewsFromWeb = GetReviewsFromWeb(dto, reviewerId);
+                reviewsFromWeb = reviewsFromWeb.Where(rev => rev.ReviewDate == dto.MinimumDate).ToList();
+                foreach(var review in reviewsFromWeb)
+                {
+                    var revInDb = await _repo.GetReview(review.PenName,review.BookAsin,review.ReviewDate,review.ReviewTitle);
+                    if(revInDb!=null)
+                    {
+                        reviewsFromWeb.Remove(review);
+                    }
+                }
+                _repo.AddMultiple(reviewsFromWeb);
+                if(await _repo.SaveAll())
+                {
+                    return Ok(reviewsFromWeb.Count);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            return BadRequest("Could not add reviews");
+        }
 
         [HttpPost]
         public async Task<IActionResult> AddReviews([FromForm]ReviewForCreationDto dto)

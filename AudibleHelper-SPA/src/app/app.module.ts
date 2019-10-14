@@ -48,6 +48,10 @@ import { SessionModalComponent } from './admin/session-modal/session-modal.compo
 import { ReviewAuditComponent } from './admin/review-audit/review-audit.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DatePipe } from '@angular/common';
+import { AssignmentListComponent } from './assignment/assignment-list/assignment-list.component';
+import { AssignmentService } from './_services/assignment.service';
+import { AssignmentListResolver } from './_resolvers/assignment-list.resolver';
+import { AddAssignmentComponent } from './assignment/add-assignment/add-assignment.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -77,7 +81,9 @@ export function tokenGetter() {
       SessionManagementComponent,
       SessionModalComponent,
       ReviewAuditComponent,
-      DashboardComponent
+      DashboardComponent,
+      AssignmentListComponent,
+      AddAssignmentComponent
    ],
    imports: [
       BrowserModule,
@@ -116,7 +122,9 @@ export function tokenGetter() {
       ReviewService,
       ReviewListResolver,
       UserKnownAsResolver,
-      DatePipe
+      DatePipe,
+      AssignmentService,
+      AssignmentListResolver
    ],
    entryComponents: [
     RolesModalComponent,

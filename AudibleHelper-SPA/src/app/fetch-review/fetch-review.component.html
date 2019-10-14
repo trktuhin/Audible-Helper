@@ -1,43 +1,110 @@
 <div class="container">
-  <div class="row justify-content-center">
-    <div class="col-6">
-      <h2 class="text-center mt-3">Add Reviews</h2>
-      <div class="form-group text-center">
-        <label class="radio-inline">
+  <tabset class="member-tabset">
+    <tab heading="Normal Task">
+      <div class="row justify-content-center">
+        <div class="col-6">
+          <h2 class="text-center mt-3">Add Normal Task Reviews</h2>
+          <div class="form-group text-center">
+            <label class="radio-inline">
+              <input
+                class="mr-3"
+                type="radio"
+                value="us"
+                name="normalCountry"
+                [(ngModel)]="normalTask.country"
+              />US
+            </label>
+            <label class="radio-inline ml-3">
+              <input
+                class="mr-3"
+                type="radio"
+                value="uk"
+                name="normalCountry"
+                [(ngModel)]="normalTask.country"
+              />UK
+            </label>
+          </div>
+          <div class="form-group">
             <input
-            class="mr-3"
-            type="radio"
-            value="us"
-            name="country"
-            [(ngModel)]="country"
-          />US
-        </label>
-        <label class="radio-inline ml-3">
-          <input
-            class="mr-3"
-            type="radio"
-            value="uk"
-            name="country"
-            [(ngModel)]="country"
-          />UK
-        </label>
-      </div>
-      <div class="form-group">
-        <input type="text" class="form-control" [(ngModel)]="bookAsin" name="bookAsin" placeholder="Book Asin">
-      </div>
-      <div class="form-group">
-        <input accept=".xlsx" type="file" (change)="handleFileInput($event.target.files)" class="form-control">
-      </div>
-      <div class="form-group text-center">
-          <button
-            class="btn btn-primary"
-            type="button"
-            (click)="AddReviews()"
-          >
-            Submit
-          </button>
+              type="text"
+              class="form-control"
+              [(ngModel)]="normalTask.bookAsin"
+              name="bookAsin"
+              placeholder="Book Asin"
+            />
+          </div>
+          <div class="form-group">
+            <input autocomplete="off" type="text" class="form-control ml-1"
+            [(ngModel)]="normalTask.minimumDate"
+            bsDatepicker
+            [bsConfig]="bsConfig"
+            id="minimumDate" name="minimumDate">
+          </div>
+          <div class="form-group text-center">
+            <button
+              class="btn btn-primary"
+              type="button"
+              (click)="AddNormalReviews()"
+            >
+              Submit
+            </button>
+          </div>
         </div>
-    </div>
-  </div>
+      </div>
+    </tab>
+    <tab heading="Daily Task">
+      <div class="row justify-content-center">
+        <div class="col-6">
+          <h2 class="text-center mt-3">Add Daily Task Reviews</h2>
+          <div class="form-group text-center">
+            <label class="radio-inline">
+              <input
+                class="mr-3"
+                type="radio"
+                value="us"
+                name="country"
+                [(ngModel)]="country"
+              />US
+            </label>
+            <label class="radio-inline ml-3">
+              <input
+                class="mr-3"
+                type="radio"
+                value="uk"
+                name="country"
+                [(ngModel)]="country"
+              />UK
+            </label>
+          </div>
+          <div class="form-group">
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="bookAsin"
+              name="bookAsin"
+              placeholder="Book Asin"
+            />
+          </div>
+          <div class="form-group">
+            <input
+              accept=".xlsx"
+              type="file"
+              (change)="handleFileInput($event.target.files)"
+              class="form-control"
+            />
+          </div>
+          <div class="form-group text-center">
+            <button
+              class="btn btn-primary"
+              type="button"
+              (click)="AddReviews()"
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+      </div>
+    </tab>
+  </tabset>
 </div>
 <ngx-spinner></ngx-spinner>

@@ -4,6 +4,7 @@ import { SessionService } from 'src/app/_services/session.service';
 import { AlertifyService } from 'src/app/_services/alertify.service';
 import { Session } from 'src/app/_models/session';
 import { SessionModalComponent } from '../session-modal/session-modal.component';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-session-management',
@@ -19,7 +20,7 @@ export class SessionManagementComponent implements OnInit {
   bsModalRef: BsModalRef;
 
   constructor(private sessionService: SessionService, private alertify: AlertifyService,
-              private modalService: BsModalService) { }
+              private modalService: BsModalService, private datePipe: DatePipe) { }
 
   ngOnInit() {
     this.loadSessions();
@@ -51,9 +52,11 @@ export class SessionManagementComponent implements OnInit {
   }
 
   updateSession(session) {
+    session.startDate = this.datePipe.transform(session.startDate, 'MM/dd/yyyy');
+    session.endDate = this.datePipe.transform(session.endDate, 'MM/dd/yyyy');
     this.sessionService.updateSession(session).subscribe(() => {
       this.loadSessions();
-      this.alertify.success('Session was updated')
+      this.alertify.success('Session was updated');
     }, err => {
       this.alertify.error(err);
     });

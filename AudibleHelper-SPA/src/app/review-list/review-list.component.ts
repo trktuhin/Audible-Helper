@@ -77,7 +77,6 @@ export class ReviewListComponent implements OnInit {
           this.alertify.error(error);
         }
       );
-    console.log(this.dateFrom);
   }
 
   deleteReview(review: Review) {

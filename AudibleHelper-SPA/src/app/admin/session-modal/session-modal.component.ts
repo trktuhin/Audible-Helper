@@ -14,6 +14,8 @@ export class SessionModalComponent implements OnInit {
   constructor(public bsModalRef: BsModalRef) {}
 
   ngOnInit() {
+    this.session.startDate = new Date(this.session.startDate);
+    this.session.endDate = new Date(this.session.endDate);
   }
 
   update() {

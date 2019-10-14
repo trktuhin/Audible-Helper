@@ -49,3 +49,7 @@
   border-top: 1px solid #eee;
   padding: 15px 0;
 }
+
+.roudedBtn {
+  border-radius: 18px;
+}

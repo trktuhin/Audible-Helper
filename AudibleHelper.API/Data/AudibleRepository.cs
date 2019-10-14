@@ -16,6 +16,11 @@ namespace AudibleHelper.API.Data
             _context = context;
 
         }
+
+        public void AddMultiple<T>(IEnumerable<T> entities) where T : class
+        {
+            _context.AddRange(entities);
+        }
         public void Add<T>(T entity) where T : class
         {
             _context.Add(entity);
@@ -179,6 +184,40 @@ namespace AudibleHelper.API.Data
             var session = await _context.Sessions.SingleOrDefaultAsync(s => s.Id == id);
             return session;
         }
-        
+
+        public async Task<PagedList<Assignment>> GetAssignments(AssignmentParams assParams)
+        {
+             var assignments = _context.Assignments.Include(ass => ass.AssignedTo).AsQueryable();
+            if(assParams.AssignedToId != 0 && assParams.AssignedToId != -1)
+            {
+                assignments = assignments.Where(ass => ass.AssignedToId == assParams.AssignedToId);
+            }
+            if(assParams.DateFrom != null && assParams.DateFrom != DateTime.MinValue)
+            {
+                assignments = assignments.Where(ass => ass.AssignedDate >= assParams.DateFrom);
+            }
+            if(assParams.DateTo != null && assParams.DateTo != DateTime.MinValue)
+            {
+                assignments = assignments.Where(ass => ass.AssignedDate <= assParams.DateTo);
+            }
+            if(!string.IsNullOrWhiteSpace(assParams.BookAsin))
+            {
+                assignments = assignments.Where(ass => ass.BookAsin == assParams.BookAsin);
+            }
+            if(!string.IsNullOrWhiteSpace(assParams.Country))
+            {
+                assignments = assignments.Where(ass => ass.Country.ToLower() == assParams.Country.ToLower());
+            }
+            
+            assignments = assignments.OrderByDescending(ass => ass.AssignedDate);
+            return await PagedList<Assignment>.CreateAsync(assignments, assParams.PageNumber, assParams.PageSize);
+        }
+
+        public async Task<Assignment> GetAssignment(string bookAsin, DateTime assignedDate, int assignedToId, int startingRating)
+        {
+            return await _context.Assignments.FirstOrDefaultAsync(ass =>
+                ass.BookAsin == bookAsin && ass.AssignedDate == assignedDate 
+                        && ass.AssignedToId == assignedToId && ass.StartingRating == startingRating);
+        }
     }
 }

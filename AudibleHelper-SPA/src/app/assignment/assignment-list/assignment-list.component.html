@@ -1,0 +1,81 @@
+<div class="row">
+  <div class="col-12 text-center mt-3">
+    <h2>{{pagination.totalItems}} assignments found <span *ngIf="user">for {{user.knownAs}} </span>
+      <span>
+          <a [routerLink]="['/assignments/add']" routerLinkActive="router-link-active"  class="btn btn-primary roudedBtn">Add Assignment</a>
+      </span>
+    </h2>
+  </div>
+</div>
+
+<div class="container">
+  <form class="form-inline" #form="ngForm" (ngSubmit)="loadAssignments()" novalidate>
+      <div class="form-group">
+        <label for="dateFrom">Date From</label>
+        <input autocomplete="off" type="text" class="form-control ml-1" [(ngModel)]="dateFrom"
+        bsDatepicker
+        [bsConfig]="bsConfig"
+        style="width: 150px" id="dateFrom" name="dateFrom">
+      </div>
+
+      <div class="form-group ml-1">
+          <label for="dateTo">Date To</label>
+          <input autocomplete="off" type="text" class="form-control ml-1" [(ngModel)]="dateTo"
+          bsDatepicker
+          [bsConfig]="bsConfig"
+          style="width: 150px" id="dateTo" name="dateTo">
+        </div>
+
+      <div class="form-group ml-1">
+        <label for="country">Country</label>
+        <select class="form-control ml-1" style="width: 100px" [(ngModel)]="country" id="country" name="country">
+          <option *ngFor="let country of countryList" [value]="country.value">
+            {{country.display}}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group ml-1">
+        <label for="bookAsin">Book Asin</label>
+        <input type="text" class="form-control ml-1" style="width: 150px" [(ngModel)]="bookAsin" id="bookAsin" name="bookAsin">
+      </div>
+
+      <button type="submit" class="btn btn-info" style="margin-left:10px"><i class="fa fa-search-minus"></i></button>
+    </form>
+    <br>
+<div class="row">
+  <table class="table">
+    <tr>
+      <th style="width: 15%">Assigned Date</th>
+      <th style="width: 10%">Book Asin</th>
+      <th style="width: 10%">Country</th>
+      <th style="width: 10%">Total Code</th>
+      <th style="width: 15%">Created By</th>
+      <th style="width: 15%">Starting Rating</th>
+      <th style="width: 15%">Last Modified On</th>
+      <th style="width: 10%">Edit</th>
+    </tr>
+    <tr *ngFor="let assignment of assignments">
+      <td>{{assignment.assignedDate|date:'mediumDate'}}</td>
+      <td>{{assignment.bookAsin}}</td>
+      <td>{{assignment.country|uppercase}}</td>
+      <td>{{assignment.totalCodes}}</td>
+      <td>{{assignment.createdBy}}</td>
+      <td>{{assignment.startingRating}}</td>
+      <td>{{assignment.lastModifiedOn|date:'mediumDate'}}</td>
+      <td>
+        <button  class="btn  btn-outline-info">
+          <i class="fa fa-edit"></i>
+        </button></td>
+    </tr>
+  </table>
+</div>
+</div>
+
+<div class="d-flex justify-content-center">
+<pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems"
+[(ngModel)]="pagination.currentPage" [itemsPerPage]="pagination.itemsPerPage"
+(pageChanged)="pageChanged($event)"
+previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"
+[maxSize]="5" [rotate]="false"></pagination>
+</div>

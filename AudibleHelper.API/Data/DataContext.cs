@@ -15,6 +15,7 @@ namespace AudibleHelper.API.Data
         public DbSet<Message> Messages { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Session> Sessions { get; set; }
+        public DbSet<Assignment> Assignments { get; set; }
         public DbSet<Payment> Payments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -23,6 +24,11 @@ namespace AudibleHelper.API.Data
             builder.Entity<Review>(review => {
                 review.HasKey( rev => new {rev.PenName, rev.BookAsin, rev.ReviewDate, rev.ReviewTitle});
             });
+
+            builder.Entity<Assignment>(assignment => {
+                assignment.HasKey( ass => new {ass.BookAsin, ass.AssignedDate, ass.AssignedToId, ass.StartingRating});
+            });
+
             builder.Entity<UserRole>(userRole => {
                 userRole.HasKey(ur => new {ur.UserId, ur.RoleId});
                 userRole.HasOne(ur => ur.Role)
