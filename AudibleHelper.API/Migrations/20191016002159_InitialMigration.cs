@@ -184,21 +184,23 @@ namespace DatingApp.API.Migrations
                 name: "Assignments",
                 columns: table => new
                 {
-                    BookAsin = table.Column<string>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    BookAsin = table.Column<string>(nullable: true),
+                    TotalCodes = table.Column<int>(nullable: false),
                     AssignedDate = table.Column<DateTime>(nullable: false),
                     AssignedToId = table.Column<int>(nullable: false),
-                    StartingRating = table.Column<int>(nullable: false),
-                    TotalCodes = table.Column<int>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
                     CreatedBy = table.Column<string>(nullable: true),
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     LastModifiedBy = table.Column<string>(nullable: true),
                     LastModifiedOn = table.Column<DateTime>(nullable: false),
-                    Country = table.Column<string>(nullable: true)
+                    Country = table.Column<string>(nullable: true),
+                    StartingRating = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Assignments", x => new { x.BookAsin, x.AssignedDate, x.AssignedToId, x.StartingRating });
+                    table.PrimaryKey("PK_Assignments", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Assignments_AspNetUsers_AssignedToId",
                         column: x => x.AssignedToId,

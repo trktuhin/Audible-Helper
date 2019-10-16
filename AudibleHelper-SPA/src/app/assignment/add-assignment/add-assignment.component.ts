@@ -29,6 +29,10 @@ export class AddAssignmentComponent implements OnInit {
   }
 
   AddAssignment() {
+    if (this.assignment.bookAsin === '') {
+      this.alertify.error('Please enter book asin first');
+      return;
+    }
     this.assignment.assignedDate = this.datePipe.transform(this.todayDate, 'MM/dd/yyyy');
     this.assService.addAssignment(this.assignment).subscribe(() => {
       this.alertify.success('Assignment added');

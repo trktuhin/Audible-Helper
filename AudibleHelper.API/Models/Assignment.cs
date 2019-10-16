@@ -4,6 +4,7 @@ namespace AudibleHelper.API.Models
 {
     public class Assignment
     {
+        public int Id { get; set; }
         public string BookAsin { get; set; }
         public int TotalCodes { get; set; }
         public DateTime AssignedDate { get; set;}
@@ -16,5 +17,6 @@ namespace AudibleHelper.API.Models
         public DateTime LastModifiedOn { get; set; }
         public string Country { get; set; }
         public int StartingRating { get; set; }
+        public bool IsCompleted { get; set; }
     }
 }

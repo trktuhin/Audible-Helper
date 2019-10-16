@@ -35,7 +35,15 @@ getAssignments(assParams): Observable<PaginatedResult<Assignment[]>> {
     return this.http.post(this.baseUrl + 'assignment', assignment);
   }
 
-  // deleteReview(review: Review) {
-  //   return this.http.post(this.baseUrl + 'Reviews/DeleteReview', review);
-  // }
+  markAsComplete(id: number) {
+    return this.http.post(this.baseUrl + 'assignment/markComplete/' + id, {});
+  }
+
+  updateAssignment(assignment) {
+    return this.http.put(this.baseUrl + 'assignment', assignment);
+  }
+
+  deleteAssignment(id: number) {
+    return this.http.post(this.baseUrl + 'assignment/DeleteAssignment/' + id, {});
+  }
 }

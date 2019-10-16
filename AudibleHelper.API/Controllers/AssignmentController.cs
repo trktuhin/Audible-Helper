@@ -69,5 +69,71 @@ namespace AudibleHelper.API.Controllers
             assignments.TotalCount,assignments.TotalPages);
             return Ok(assignments);
         }
+        [HttpPut]
+        public async Task<IActionResult> UpdateAssignment(Assignment assignment)
+        {
+            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var currentUser = await _repo.GetUser(currentUserId);
+            if(currentUser == null)
+            {
+                return BadRequest("Could not find user!");
+            }
+            var assignmentInDb = await _repo.GetAssignment(assignment.Id);
+            if(assignmentInDb == null)
+            {
+                return NotFound();
+            }
+            assignmentInDb.BookAsin = assignment.BookAsin;
+            assignmentInDb.Country = assignment.Country;
+            assignmentInDb.TotalCodes = assignment.TotalCodes;
+            assignmentInDb.StartingRating = assignment.StartingRating;
+            assignmentInDb.LastModifiedOn = DateTime.Now;
+            assignmentInDb.LastModifiedBy = currentUser.KnownAs;
+            if(await _repo.SaveAll())
+            {
+                return Ok();
+            }
+            return BadRequest("Could not update");
+        }
+
+        [HttpPost("DeleteAssignment/{id}")]
+        public async Task<IActionResult> DeleteAssignment(int id)
+        {
+            var assignmentInDb = await _repo.GetAssignment(id);
+            if(assignmentInDb == null)
+            {
+                return NotFound();
+            }
+            assignmentInDb.IsDeleted = true;
+            if(await _repo.SaveAll())
+            {
+                return Ok();
+            }
+            return BadRequest("Could not delete");
+        }
+
+        [HttpPost("markComplete/{id}")]
+        public async Task<IActionResult> MarkAsComplete(int id)
+        {
+            var assignmentInDb = await _repo.GetAssignment(id);
+            if(assignmentInDb == null)
+            {
+                return NotFound();
+            }
+            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var currentUser = await _repo.GetUser(currentUserId);
+            if(currentUser == null)
+            {
+                return BadRequest("Could not find user!");
+            }
+            assignmentInDb.IsCompleted = true;
+            assignmentInDb.LastModifiedBy = currentUser.KnownAs;
+            assignmentInDb.LastModifiedOn = DateTime.Now;
+            if(await _repo.SaveAll())
+            {
+                return Ok();
+            }
+            return BadRequest("Could not mark as complete");
+        }
     }
 }

@@ -1,6 +1,7 @@
 import { User } from './user';
 
 export interface Assignment {
+  id: number;
   assignedToId: number;
   bookAsin: string;
   country: string;
@@ -12,4 +13,5 @@ export interface Assignment {
   lastModifiedBy: string;
   lastModifiedOn: Date;
   startingRating: number;
+  isCompleted: boolean;
 }

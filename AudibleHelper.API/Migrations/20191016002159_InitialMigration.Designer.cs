@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DatingApp.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20191014082513_InitialMigration")]
+    [Migration("20191016002159_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,13 +20,14 @@ namespace DatingApp.API.Migrations
 
             modelBuilder.Entity("AudibleHelper.API.Models.Assignment", b =>
                 {
-                    b.Property<string>("BookAsin");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("AssignedDate");
 
                     b.Property<int>("AssignedToId");
 
-                    b.Property<int>("StartingRating");
+                    b.Property<string>("BookAsin");
 
                     b.Property<string>("Country");
 
@@ -40,9 +41,11 @@ namespace DatingApp.API.Migrations
 
                     b.Property<DateTime>("LastModifiedOn");
 
+                    b.Property<int>("StartingRating");
+
                     b.Property<int>("TotalCodes");
 
-                    b.HasKey("BookAsin", "AssignedDate", "AssignedToId", "StartingRating");
+                    b.HasKey("Id");
 
                     b.HasIndex("AssignedToId");
 

@@ -52,6 +52,8 @@ import { AssignmentListComponent } from './assignment/assignment-list/assignment
 import { AssignmentService } from './_services/assignment.service';
 import { AssignmentListResolver } from './_resolvers/assignment-list.resolver';
 import { AddAssignmentComponent } from './assignment/add-assignment/add-assignment.component';
+import { AssignmentModalComponent } from './assignment/assignment-modal/assignment-modal.component';
+import { AssignmentAuditComponent } from './admin/assignment-audit/assignment-audit.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -83,7 +85,9 @@ export function tokenGetter() {
       ReviewAuditComponent,
       DashboardComponent,
       AssignmentListComponent,
-      AddAssignmentComponent
+      AddAssignmentComponent,
+      AssignmentModalComponent,
+      AssignmentAuditComponent
    ],
    imports: [
       BrowserModule,
@@ -128,7 +132,8 @@ export function tokenGetter() {
    ],
    entryComponents: [
     RolesModalComponent,
-    SessionModalComponent
+    SessionModalComponent,
+    AssignmentModalComponent
    ],
    bootstrap: [
       AppComponent

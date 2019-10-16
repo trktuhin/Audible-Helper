@@ -25,10 +25,6 @@ namespace AudibleHelper.API.Data
                 review.HasKey( rev => new {rev.PenName, rev.BookAsin, rev.ReviewDate, rev.ReviewTitle});
             });
 
-            builder.Entity<Assignment>(assignment => {
-                assignment.HasKey( ass => new {ass.BookAsin, ass.AssignedDate, ass.AssignedToId, ass.StartingRating});
-            });
-
             builder.Entity<UserRole>(userRole => {
                 userRole.HasKey(ur => new {ur.UserId, ur.RoleId});
                 userRole.HasOne(ur => ur.Role)

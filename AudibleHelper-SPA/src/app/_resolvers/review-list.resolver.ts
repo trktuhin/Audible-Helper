@@ -5,6 +5,7 @@ import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Review } from '../_models/review';
 import { ReviewService } from '../_services/review.service';
+import { DatePipe } from '@angular/common';
 
 @Injectable()
 export class ReviewListResolver implements Resolve<Review[]> {
@@ -14,7 +15,8 @@ export class ReviewListResolver implements Resolve<Review[]> {
   constructor(
     private revService: ReviewService,
     private router: Router,
-    private alertify: AlertifyService
+    private alertify: AlertifyService,
+    private datePipe: DatePipe
   ) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<Review[]> {
@@ -27,8 +29,8 @@ export class ReviewListResolver implements Resolve<Review[]> {
       pageNumber: this.pageNumber,
       pageSize: this.pageSize,
       reviewerId,
-      dateFrom: new Date(),
-      dateTo: new Date()
+      dateFrom: this.datePipe.transform(new Date(), 'MM/dd/yyyy'),
+      dateTo: this.datePipe.transform(new Date(), 'MM/dd/yyyy')
     }).pipe(
       catchError( error => {
         this.alertify.error(error);

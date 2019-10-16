@@ -1,0 +1,88 @@
+<div>
+  <div class="row justify-content-center">
+    <form class="form-inline" #form="ngForm" (ngSubmit)="loadAssignments()" novalidate>
+      <div class="form-group ml-1">
+        <label for="member"><i class="fa fa-user px-1"></i></label>
+        <select class="form-control ml-1" style="width: 180px" [(ngModel)]="userId" id="member" name="member">
+          <option value="-1">All</option>
+          <option *ngFor="let user of users" [value]="user.id">
+            {{user.knownAs}}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group ml-1">
+        <label for="session"><i class="fa fa-calendar px-1"></i></label>
+        <select class="form-control ml-1" style="width: 180px" [(ngModel)]="sessionId" id="session" name="session">
+          <option value="-1">All</option>
+          <option *ngFor="let session of sessions" [value]="session.id">
+            {{session.name}}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group ml-1">
+        <label for="isComplete"><i class="fa fa-check-square px-1"></i></label>
+        <select class="form-control ml-1" style="width: 150px" [(ngModel)]="isCompleted" id="isComplete" name="isComplete">
+          <option *ngFor="let item of completeList" [value]="item.value">
+            {{item.display}}
+          </option>
+        </select>
+      </div>
+      <div class="form-group ml-1">
+        <label for="bookAsin"><i class="fa fa-list-ol px-1"></i></label>
+        <input type="text" class="form-control ml-1" style="width: 150px" [(ngModel)]="bookAsin"
+        placeholder="Book Asin"
+        id="bookAsin" name="knownAs">
+      </div>
+
+      <div class="form-group ml-1">
+        <label for="country"><i class="fa fa-flag px-1"></i></label>
+        <select class="form-control ml-1" style="width: 100px" [(ngModel)]="country" id="country" name="country">
+          <option *ngFor="let country of countryList" [value]="country.value">
+            {{country.display}}
+          </option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-info" style="margin-left:10px"><i class="fa fa-search-minus"></i></button>
+      <span class="ml-2">Total Codes: {{totalCodes}}</span>
+    </form>
+  </div>
+    <br>
+    <div class="row">
+      <table class="table">
+        <tr>
+          <th style="width: 5%">SL</th>
+          <th style="width: 15%">Assigned Date</th>
+          <th style="width: 10%">Total Codes</th>
+          <th style="width: 15%">Starting Rating</th>
+          <th style="width: 10%">Book Asin</th>
+          <th style="width: 5%">Country</th>
+          <th style="width: 10%">Assigned To</th>
+          <th style="width: 20%">Last Modified On</th>
+          <th style="width: 10%">Status</th>
+        </tr>
+        <tr *ngFor="let assignment of assignments; index as i">
+          <td>{{i+1}}</td>
+          <td>{{assignment.assignedDate|date:'mediumDate'}}</td>
+          <td>{{assignment.totalCodes}}</td>
+          <td>{{assignment.startingRating}}</td>
+          <td>{{assignment.bookAsin}}</td>
+          <td>{{assignment.country|uppercase}}</td>
+          <td>{{assignment.assignedTo.knownAs}}</td>
+          <td>{{assignment.lastModifiedOn|date:'medium'}}</td>
+          <td>{{assignment.isCompleted? 'Completed':"Incomplete"}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-center">
+    <pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems"
+    [(ngModel)]="pagination.currentPage" [itemsPerPage]="pagination.itemsPerPage"
+    (pageChanged)="pageChanged($event)"
+    previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"
+    [maxSize]="5" [rotate]="false"></pagination>
+  </div>
+

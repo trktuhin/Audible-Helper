@@ -1,6 +1,13 @@
 <div class="text-center">
-  <h1>Dashboard</h1>
+  <h3 class="mt-1">Dashboard</h3>
 </div>
 <div class="container">
-  <app-review-audit></app-review-audit>
+  <tabset class="member-tabset">
+    <tab heading="Reviews">
+      <app-review-audit></app-review-audit>
+    </tab>
+    <tab heading="Assignments">
+      <app-assignment-audit></app-assignment-audit>
+    </tab>
+  </tabset>
 </div>

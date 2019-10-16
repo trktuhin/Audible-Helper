@@ -1,0 +1,76 @@
+<div class="modal-header">
+  <h4 class="modal-title pull-left">Edit Assignment</h4>
+  <button
+    type="button"
+    class="close pull-right"
+    aria-label="Close"
+    (click)="bsModalRef.hide()"
+  >
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <form #rolesForm="ngForm" id="assignmentForm">
+    <div class="form-group text-center">
+      <label class="radio-inline">
+        <input
+          class="mr-3"
+          type="radio"
+          value="us"
+          name="Country"
+          [(ngModel)]="assignment.country"
+        />US
+      </label>
+      <label class="radio-inline ml-3">
+        <input
+          class="mr-3"
+          type="radio"
+          value="uk"
+          name="Country"
+          [(ngModel)]="assignment.country"
+        />UK
+      </label>
+    </div>
+    <div class="form-group">
+      <label for="bookAsin" class="pl-1">Book Asin</label>
+      <input
+        type="text"
+        class="form-control ml-1"
+        [(ngModel)]="assignment.bookAsin"
+        placeholder="Book Asin"
+        name="bookAsin"
+      />
+    </div>
+    <div class="form-group">
+      <label for="startingRating" class="pl-1">Starting Rating</label>
+      <input
+        type="number"
+        class="form-control ml-1"
+        [(ngModel)]="assignment.startingRating"
+        name="startingRating"
+      />
+    </div>
+    <div class="form-group">
+      <label for="totalCodes" class="pl-1">Total Codes</label>
+      <input
+        type="number"
+        class="form-control ml-1"
+        [(ngModel)]="assignment.totalCodes"
+        name="totalCodes"
+      />
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">
+    Cancel
+  </button>
+  <button
+    type="button"
+    class="btn btn-success"
+    (click)="update()"
+    form="sessionForm"
+  >
+    Submit
+  </button>
+</div>

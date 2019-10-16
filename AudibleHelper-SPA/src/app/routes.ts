@@ -29,7 +29,8 @@ export const appRoutes: Routes = [
     canActivate: [AuthGuard],
     children: [
       {path: 'changePassword', component: ChangePasswordComponent},
-      {path: 'dashboard', component: DashboardComponent, resolve: {reviews: ReviewListResolver}
+      {path: 'dashboard', component: DashboardComponent, resolve: {reviews: ReviewListResolver,
+              assignments: AssignmentListResolver}
       , data: { roles: ['Admin', 'Moderator'] }},
       {path: 'members', component: MemberListComponent, resolve: {users: MemberListResolver}},
       {path: 'members/:id', component: MemberDetailComponent, resolve: {user: MemberDetailResolver}},
@@ -42,7 +43,9 @@ export const appRoutes: Routes = [
         resolve: {reviews: ReviewListResolver, user: UserKnownAsResolver}},
       {path: 'reviews', component: ReviewListComponent, resolve: {reviews: ReviewListResolver}},
       {path: 'assignments/add', component: AddAssignmentComponent},
-      {path: 'assignments', component: AssignmentListComponent, resolve: {reviews: AssignmentListResolver}}
+      {path: 'assignments/:id', component: AssignmentListComponent, data: { roles: ['Admin', 'Moderator'] },
+        resolve: {assignments: AssignmentListResolver, user: UserKnownAsResolver}},
+      {path: 'assignments', component: AssignmentListComponent, resolve: {assignments: AssignmentListResolver}}
     ]
   },
 

@@ -33,6 +33,10 @@ export class SessionManagementComponent implements OnInit {
   }
 
   addSession() {
+    if (this.name === '') {
+      this.alertify.error('Please enter session name first');
+      return;
+    }
     this.sessionService.addSession(this.startDate, this.endDate, this.name).subscribe(() => {
       this.alertify.success('Session added successfully');
       this.loadSessions();

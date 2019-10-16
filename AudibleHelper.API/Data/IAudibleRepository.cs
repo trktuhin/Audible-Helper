@@ -23,7 +23,7 @@ namespace AudibleHelper.API.Data
          Task<PagedList<Message>> GetMessagesForUser(MessageParams messageParams);
          Task<IEnumerable<Message>> GetMessageThread(int userId, int recipientId);
          Task<Review> GetReview(string penName, string bookAsin, DateTime reviewDate, string reviewTitle);
-         Task<Assignment> GetAssignment(string bookAsin, DateTime assignedDate, int assignedToId, int startingRating);
+         Task<Assignment> GetAssignment(int id);
          Task<IEnumerable<Session>> GetSessions();
          Task<Session> GetSession(int id);
     }

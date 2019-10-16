@@ -187,7 +187,7 @@ namespace AudibleHelper.API.Data
 
         public async Task<PagedList<Assignment>> GetAssignments(AssignmentParams assParams)
         {
-             var assignments = _context.Assignments.Include(ass => ass.AssignedTo).AsQueryable();
+            var assignments = _context.Assignments.Include(ass => ass.AssignedTo).AsQueryable();
             if(assParams.AssignedToId != 0 && assParams.AssignedToId != -1)
             {
                 assignments = assignments.Where(ass => ass.AssignedToId == assParams.AssignedToId);
@@ -208,16 +208,14 @@ namespace AudibleHelper.API.Data
             {
                 assignments = assignments.Where(ass => ass.Country.ToLower() == assParams.Country.ToLower());
             }
-            
+            assignments = assignments.Where(ass => ass.IsDeleted == false && ass.IsCompleted == assParams.IsCompleted);
             assignments = assignments.OrderByDescending(ass => ass.AssignedDate);
             return await PagedList<Assignment>.CreateAsync(assignments, assParams.PageNumber, assParams.PageSize);
         }
 
-        public async Task<Assignment> GetAssignment(string bookAsin, DateTime assignedDate, int assignedToId, int startingRating)
+        public async Task<Assignment> GetAssignment(int id)
         {
-            return await _context.Assignments.FirstOrDefaultAsync(ass =>
-                ass.BookAsin == bookAsin && ass.AssignedDate == assignedDate 
-                        && ass.AssignedToId == assignedToId && ass.StartingRating == startingRating);
+            return await _context.Assignments.FirstOrDefaultAsync(ass => ass.Id == id);
         }
     }
 }

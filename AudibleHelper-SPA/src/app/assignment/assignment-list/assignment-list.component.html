@@ -1,81 +1,172 @@
 <div class="row">
   <div class="col-12 text-center mt-3">
-    <h2>{{pagination.totalItems}} assignments found <span *ngIf="user">for {{user.knownAs}} </span>
+    <h2>
+      {{ pagination.totalItems }} assignments found
+      <span *ngIf="user">for {{ user.knownAs }} </span>
       <span>
-          <a [routerLink]="['/assignments/add']" routerLinkActive="router-link-active"  class="btn btn-primary roudedBtn">Add Assignment</a>
+        <a
+          [routerLink]="['/assignments/add']"
+          title="add assignments"
+          routerLinkActive="router-link-active"
+          class="btn btn-primary roudedBtn"
+        >
+          <i class="fa fa-plus-square"></i>
+        </a>
       </span>
+      <span class="text-small ml-3"> Total codes: {{ this.totalCodes }} </span>
     </h2>
   </div>
 </div>
 
 <div class="container">
-  <form class="form-inline" #form="ngForm" (ngSubmit)="loadAssignments()" novalidate>
+  <div class="row justify-content-center">
+    <form
+      class="form-inline"
+      #form="ngForm"
+      (ngSubmit)="loadAssignments()"
+      novalidate
+    >
       <div class="form-group">
-        <label for="dateFrom">Date From</label>
-        <input autocomplete="off" type="text" class="form-control ml-1" [(ngModel)]="dateFrom"
-        bsDatepicker
-        [bsConfig]="bsConfig"
-        style="width: 150px" id="dateFrom" name="dateFrom">
+        <label for="dateFrom"><i class="fa fa-hourglass-start px-1"></i></label>
+        <input
+          autocomplete="off"
+          type="text"
+          class="form-control ml-1"
+          [(ngModel)]="dateFrom"
+          bsDatepicker
+          [bsConfig]="bsConfig"
+          style="width: 150px"
+          id="dateFrom"
+          name="dateFrom"
+        />
       </div>
 
       <div class="form-group ml-1">
-          <label for="dateTo">Date To</label>
-          <input autocomplete="off" type="text" class="form-control ml-1" [(ngModel)]="dateTo"
+        <label for="dateTo"><i class="fa fa-hourglass-end px-1"></i></label>
+        <input
+          autocomplete="off"
+          type="text"
+          class="form-control ml-1"
+          [(ngModel)]="dateTo"
           bsDatepicker
           [bsConfig]="bsConfig"
-          style="width: 150px" id="dateTo" name="dateTo">
-        </div>
+          style="width: 150px"
+          id="dateTo"
+          name="dateTo"
+        />
+      </div>
 
       <div class="form-group ml-1">
-        <label for="country">Country</label>
-        <select class="form-control ml-1" style="width: 100px" [(ngModel)]="country" id="country" name="country">
+        <label for="country"><i class="fa fa-flag px-1"></i></label>
+        <select
+          class="form-control ml-1"
+          style="width: 100px"
+          [(ngModel)]="country"
+          id="country"
+          name="country"
+        >
           <option *ngFor="let country of countryList" [value]="country.value">
-            {{country.display}}
+            {{ country.display }}
           </option>
         </select>
       </div>
 
       <div class="form-group ml-1">
-        <label for="bookAsin">Book Asin</label>
-        <input type="text" class="form-control ml-1" style="width: 150px" [(ngModel)]="bookAsin" id="bookAsin" name="bookAsin">
+        <label for="isComplete"><i class="fa fa-check-square px-1"></i></label>
+        <select
+          class="form-control ml-1"
+          style="width: 150px"
+          [(ngModel)]="isCompleted"
+          id="isComplete"
+          name="isComplete"
+        >
+          <option *ngFor="let item of completeList" [value]="item.value">
+            {{ item.display }}
+          </option>
+        </select>
       </div>
 
-      <button type="submit" class="btn btn-info" style="margin-left:10px"><i class="fa fa-search-minus"></i></button>
+      <div class="form-group ml-1">
+        <label for="bookAsin"><i class="fa fa-list-ol px-1"></i></label>
+        <input
+          type="text"
+          class="form-control ml-1"
+          style="width: 150px"
+          [(ngModel)]="bookAsin"
+          placeholder="Book Asin"
+          id="bookAsin"
+          name="bookAsin"
+        />
+      </div>
+
+      <button type="submit" class="btn btn-info" style="margin-left:10px">
+        <i class="fa fa-search-minus"></i>
+      </button>
     </form>
-    <br>
-<div class="row">
-  <table class="table">
-    <tr>
-      <th style="width: 15%">Assigned Date</th>
-      <th style="width: 10%">Book Asin</th>
-      <th style="width: 10%">Country</th>
-      <th style="width: 10%">Total Code</th>
-      <th style="width: 15%">Created By</th>
-      <th style="width: 15%">Starting Rating</th>
-      <th style="width: 15%">Last Modified On</th>
-      <th style="width: 10%">Edit</th>
-    </tr>
-    <tr *ngFor="let assignment of assignments">
-      <td>{{assignment.assignedDate|date:'mediumDate'}}</td>
-      <td>{{assignment.bookAsin}}</td>
-      <td>{{assignment.country|uppercase}}</td>
-      <td>{{assignment.totalCodes}}</td>
-      <td>{{assignment.createdBy}}</td>
-      <td>{{assignment.startingRating}}</td>
-      <td>{{assignment.lastModifiedOn|date:'mediumDate'}}</td>
-      <td>
-        <button  class="btn  btn-outline-info">
-          <i class="fa fa-edit"></i>
-        </button></td>
-    </tr>
-  </table>
-</div>
+  </div>
+  <br />
+  <div class="row">
+    <table class="table">
+      <tr>
+        <th style="width: 5%">SL</th>
+        <th style="width: 15%">Assigned Date</th>
+        <th style="width: 15%">Book Asin</th>
+        <th style="width: 10%">Country</th>
+        <th style="width: 10%">Total Code</th>
+        <th style="width: 15%">Starting Rating</th>
+        <th style="width: 15%">Last Modified On</th>
+        <th style="width: 15%">Action</th>
+      </tr>
+      <tr *ngFor="let assignment of assignments; index as i">
+        <td>{{ i + 1 }}</td>
+        <td>{{ assignment.assignedDate | date: "mediumDate" }}</td>
+        <td>{{ assignment.bookAsin }}</td>
+        <td>{{ assignment.country | uppercase }}</td>
+        <td>{{ assignment.totalCodes }}</td>
+        <td>{{ assignment.startingRating }}</td>
+        <td>{{ assignment.lastModifiedOn | date: "shortTime" }}</td>
+        <td>
+          <button
+            *ngIf="!assignment.isCompleted"
+            class="btn  btn-outline-info"
+            (click)="editAssignmentModal(assignment)"
+            title="edit"
+          >
+            <i class="fa fa-edit"></i>
+          </button>
+          <button
+            *ngIf="!assignment.isCompleted"
+            class="btn  btn-outline-success ml-1"
+            (click)="markAsComplete(assignment.id)"
+            title="mark as complete"
+          >
+            <i class="fa fa-check-circle"></i>
+          </button>
+          <button
+            class="btn  btn-outline-danger ml-1"
+            (click)="deleteAssignment(assignment.id)"
+            title="delete"
+          >
+            <i class="fa fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+    </table>
+  </div>
 </div>
 
 <div class="d-flex justify-content-center">
-<pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems"
-[(ngModel)]="pagination.currentPage" [itemsPerPage]="pagination.itemsPerPage"
-(pageChanged)="pageChanged($event)"
-previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;"
-[maxSize]="5" [rotate]="false"></pagination>
+  <pagination
+    [boundaryLinks]="true"
+    [totalItems]="pagination.totalItems"
+    [(ngModel)]="pagination.currentPage"
+    [itemsPerPage]="pagination.itemsPerPage"
+    (pageChanged)="pageChanged($event)"
+    previousText="&lsaquo;"
+    nextText="&rsaquo;"
+    firstText="&laquo;"
+    lastText="&raquo;"
+    [maxSize]="5"
+    [rotate]="false"
+  ></pagination>
 </div>
