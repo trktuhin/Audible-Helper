@@ -196,7 +196,8 @@ namespace DatingApp.API.Migrations
                     LastModifiedBy = table.Column<string>(nullable: true),
                     LastModifiedOn = table.Column<DateTime>(nullable: false),
                     Country = table.Column<string>(nullable: true),
-                    StartingRating = table.Column<int>(nullable: false)
+                    StartingRating = table.Column<int>(nullable: false),
+                    IsCompleted = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -303,6 +304,12 @@ namespace DatingApp.API.Migrations
                 {
                     table.PrimaryKey("PK_Payments", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Payments_AspNetUsers_MemberId",
+                        column: x => x.MemberId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Payments_Sessions_SessionId",
                         column: x => x.SessionId,
                         principalTable: "Sessions",
@@ -361,6 +368,11 @@ namespace DatingApp.API.Migrations
                 name: "IX_Messages_SenderId",
                 table: "Messages",
                 column: "SenderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payments_MemberId",
+                table: "Payments",
+                column: "MemberId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Payments_SessionId",

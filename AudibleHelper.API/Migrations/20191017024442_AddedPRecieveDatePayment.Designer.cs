@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DatingApp.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20191016002159_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20191017024442_AddedPRecieveDatePayment")]
+    partial class AddedPRecieveDatePayment
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -34,6 +34,8 @@ namespace DatingApp.API.Migrations
                     b.Property<string>("CreatedBy");
 
                     b.Property<DateTime>("CreatedOn");
+
+                    b.Property<bool>("IsCompleted");
 
                     b.Property<bool>("IsDeleted");
 
@@ -89,7 +91,11 @@ namespace DatingApp.API.Migrations
 
                     b.Property<bool>("IsReceived");
 
+                    b.Property<DateTime>("LastModifiedOn");
+
                     b.Property<int>("MemberId");
+
+                    b.Property<DateTime>("RecieveDate");
 
                     b.Property<int>("SessionId");
 
@@ -98,6 +104,8 @@ namespace DatingApp.API.Migrations
                     b.Property<float>("TotalReviews");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MemberId");
 
                     b.HasIndex("SessionId");
 
@@ -364,6 +372,11 @@ namespace DatingApp.API.Migrations
 
             modelBuilder.Entity("AudibleHelper.API.Models.Payment", b =>
                 {
+                    b.HasOne("AudibleHelper.API.Models.User", "Member")
+                        .WithMany()
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("AudibleHelper.API.Models.Session", "Session")
                         .WithMany()
                         .HasForeignKey("SessionId")

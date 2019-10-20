@@ -267,5 +267,18 @@ namespace AudibleHelper.API.Controllers
             }
             return BadRequest("Could not delete the review");
         }
+        
+        [HttpPost("DeleteRange")]
+        public async Task<IActionResult> DeleteRange(ReviewParams revParams)
+        {
+            var reviews = await _repo.GetReviewsForDelete(revParams);
+            _repo.RemoveMultiple(reviews);
+            if(await _repo.SaveAll())
+            {
+                return Ok();
+            }
+            return BadRequest("Could not delete Reviews");
+        }
+
     }
 }

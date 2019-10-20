@@ -1,20 +1,39 @@
 <div class="container mt-5">
   <div class="row">
-    <div class="btn-group">
-      <button class="btn btn-primary" [(ngModel)]="messageContainer" btnRadio="Unread" (click)="loadMessages()">
+    <div class="btn-group ">
+      <button class="btn btn-primary py-0" [(ngModel)]="messageContainer" btnRadio="Unread" (click)="loadMessages()">
         <i class="fa fa-envelope"></i> Unread
       </button>
-      <button class="btn btn-primary" [(ngModel)]="messageContainer" btnRadio="Inbox" (click)="loadMessages()">
+      <button class="btn btn-primary py-0" [(ngModel)]="messageContainer" btnRadio="Inbox" (click)="loadMessages()">
         <i class="fa fa-envelope-open"></i> Inbox
       </button>
-      <button class="btn btn-primary" [(ngModel)]="messageContainer" btnRadio="Outbox" (click)="loadMessages()">
+      <button class="btn btn-primary py-0" [(ngModel)]="messageContainer" btnRadio="Outbox" (click)="loadMessages()">
         <i class="fa fa-paper-plane"></i> Outbox
       </button>
+    </div>
+    <div class="ml-auto" *appHasRole="['Admin']">
+        <div class="form-group ml-1 form-inline">
+            <label for="dateTo"><i class="fa fa-hourglass-end px-1"></i></label>
+            <input
+              autocomplete="off"
+              type="text"
+              class="form-control ml-1"
+              [(ngModel)]="dateTo"
+              bsDatepicker
+              [bsConfig]="bsConfig"
+              style="width: 150px"
+              id="dateTo"
+              name="dateTo"
+            />
+            <button (click)="deleteAllMessage()" class="btn btn-outline-danger ml-1">
+                <i class="fa fa-trash"> </i> Delete Messages
+              </button>
+          </div>
     </div>
   </div>
 
   <div class="row" *ngIf="messages.length == 0">
-    <h3>No messages</h3>
+    <h3 class="mt-2">No new messages</h3>
   </div>
 
   <div class="row" *ngIf="messages.length > 0">
@@ -27,7 +46,7 @@
       </tr>
       <tr *ngFor="let message of messages" [routerLink]="['/members',
         messageContainer == 'Outbox' ? message.recipientId : message.senderId]" [queryParams]="{tab: 2}">
-        <td>{{message.content}}</td>
+        <td><pre>{{message.content}}</pre></td>
         <td>
           <div *ngIf="messageContainer != 'Outbox'">
                 <img src={{message?.senderPhotoUrl}} class="img-circle rounded-circle mr-1">
@@ -40,7 +59,9 @@
         </td>
         <td>{{message.messageSent | timeAgo}}</td>
         <td>
-          <button class="btn btn-danger" (click)="$event.stopPropagation()" (click)="deleteMessage(message.id)">Delete</button>
+          <button class="btn btn-outline-danger" (click)="$event.stopPropagation()" (click)="deleteMessage(message.id)">
+            <i class="fa fa-trash"></i>
+          </button>
         </td>
       </tr>
     </table>
@@ -55,6 +76,7 @@
                 [itemsPerPage]="pagination.itemsPerPage"
                 [(ngModel)]="pagination.currentPage"
                 (pageChanged)="pageChanged($event)"
+                [maxSize]="3"
               previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
   </pagination>
   </div>

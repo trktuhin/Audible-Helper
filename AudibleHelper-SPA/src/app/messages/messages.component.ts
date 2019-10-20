@@ -5,6 +5,7 @@ import { UserService } from '../_services/user.service';
 import { AuthService } from '../_services/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { AlertifyService } from '../_services/alertify.service';
+import { BsDatepickerConfig } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-messages',
@@ -15,6 +16,8 @@ export class MessagesComponent implements OnInit {
   messages: Message[];
   pagination: Pagination;
   messageContainer: 'Unread';
+  dateTo = new Date();
+  bsConfig: Partial<BsDatepickerConfig>;
   constructor(private userService: UserService, private authService: AuthService,
               private route: ActivatedRoute, private alertify: AlertifyService) { }
 
@@ -49,6 +52,18 @@ export class MessagesComponent implements OnInit {
   pageChanged(event: any): void {
     this.pagination.currentPage = event.page;
     this.loadMessages();
+  }
+
+  deleteAllMessage() {
+    this.alertify.confirmWithTitle('Are you sure?', 'All messages before ' + this.dateTo + ' will be permanently deleted',
+    () => {
+      this.userService.deleteMessages(this.dateTo).subscribe(() => {
+        this.alertify.success('All messages have been deleted');
+        this.loadMessages();
+      }, err => {
+        this.alertify.error(err);
+      });
+    });
   }
 
 }

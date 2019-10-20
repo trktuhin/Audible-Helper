@@ -17,11 +17,6 @@ constructor(private http: HttpClient, private datePipe: DatePipe) { }
 
 getReviews(revParams): Observable<PaginatedResult<Review[]>> {
   const paginatedResult: PaginatedResult<Review[]> = new PaginatedResult<Review[]>();
-  // let params = new HttpParams();
-  // if (page != null && itemsPerPage != null) {
-  //   params = params.append('pageNumber', page);
-  //   params = params.append('pageSize', itemsPerPage);
-  // }
   return this.http
       .post<Review[]>(this.baseUrl + 'reviews/GetReviews', revParams, { observe: 'response' })
       .pipe(
@@ -52,5 +47,9 @@ getReviews(revParams): Observable<PaginatedResult<Review[]>> {
 
   deleteReview(review: Review) {
     return this.http.post(this.baseUrl + 'Reviews/DeleteReview', review);
+  }
+
+  deleteReviews(revParams) {
+    return this.http.post(this.baseUrl + 'Reviews/DeleteRange', revParams);
   }
 }

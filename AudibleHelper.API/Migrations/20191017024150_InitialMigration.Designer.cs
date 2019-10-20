@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DatingApp.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20191016003828_AddedIsCompletedAssignment")]
-    partial class AddedIsCompletedAssignment
+    [Migration("20191017024150_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -100,6 +100,8 @@ namespace DatingApp.API.Migrations
                     b.Property<float>("TotalReviews");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MemberId");
 
                     b.HasIndex("SessionId");
 
@@ -366,6 +368,11 @@ namespace DatingApp.API.Migrations
 
             modelBuilder.Entity("AudibleHelper.API.Models.Payment", b =>
                 {
+                    b.HasOne("AudibleHelper.API.Models.User", "Member")
+                        .WithMany()
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("AudibleHelper.API.Models.Session", "Session")
                         .WithMany()
                         .HasForeignKey("SessionId")

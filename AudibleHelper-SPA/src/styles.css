@@ -53,3 +53,7 @@
 .roudedBtn {
   border-radius: 18px;
 }
+
+.navbar-nav .active>.nav-link {
+  color: #f5841b !important;
+}

@@ -7,6 +7,7 @@ import { PaginatedResult } from '../_models/pagination';
 import { map } from 'rxjs/operators';
 import { Message } from '../_models/message';
 import { PasswordChange } from '../_models/passwordChange';
+import { DatePipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ import { PasswordChange } from '../_models/passwordChange';
 export class UserService {
   baseUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private datePipe: DatePipe) {}
 
   getUsers(page?, itemsPerPage?, userParams?, likeParams?): Observable<PaginatedResult<User[]>> {
     const paginatedResult: PaginatedResult<User[]> = new PaginatedResult<
@@ -121,5 +122,16 @@ export class UserService {
 
   getAllUser() {
     return this.http.get<User[]>(this.baseUrl + 'users/getalluser');
+  }
+
+  getUnreadMessage() {
+    return this.http.get<number>(this.baseUrl + 'users/GetUnreadMessageCount');
+  }
+
+  deleteMessages(endDate: Date) {
+    const deleteDto = {
+      dateTo: this.datePipe.transform(endDate, 'MM/dd/yyyy')
+    };
+    return this.http.post(this.baseUrl + 'users/DeleteMessageRange', deleteDto);
   }
 }

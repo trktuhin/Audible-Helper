@@ -69,6 +69,9 @@
       <button type="submit" class="btn btn-info" style="margin-left:10px">
         <i class="fa fa-search-minus"></i>
       </button>
+      <button title="delete all" type="button" (click)="deleteAll()" class="btn btn-danger" style="margin-left:10px">
+        <i class="fa fa-trash"></i>
+      </button>
       <span class="ml-2">Total Reviews: {{ pagination.totalItems }}</span>
     </form>
   </div>

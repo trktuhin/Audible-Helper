@@ -7,6 +7,7 @@ import { Review } from 'src/app/_models/review';
 import { ReviewService } from 'src/app/_services/review.service';
 import { Pagination, PaginatedResult } from 'src/app/_models/pagination';
 import { ActivatedRoute } from '@angular/router';
+import { AlertifyService } from 'src/app/_services/alertify.service';
 
 @Component({
   selector: 'app-review-audit',
@@ -25,7 +26,8 @@ export class ReviewAuditComponent implements OnInit {
   bookAsin = '';
 
   constructor(private userService: UserService, private sessionService: SessionService,
-              private revService: ReviewService, private route: ActivatedRoute) { }
+              private revService: ReviewService, private route: ActivatedRoute,
+              private alertify: AlertifyService) { }
 
   ngOnInit() {
     this.loadUsers();
@@ -76,6 +78,25 @@ export class ReviewAuditComponent implements OnInit {
   pageChanged(event: any): void {
     this.pagination.currentPage = event.page;
     this.loadReviews();
+  }
+
+  deleteAll() {
+    this.loadReviews();
+    const revParam = {
+      reviewerId: this.userId,
+      country: this.country,
+      bookAsin: this.bookAsin,
+      sessionId: this.sessionId
+    };
+    this.alertify.confirmWithTitle('Are you sure?', 'All data will be deleted if you click Ok', () => {
+      this.revService.deleteReviews(revParam).subscribe(() => {
+        this.alertify.success('All reviews have been deleted');
+      }, err => {
+        this.alertify.error(err);
+      }, () => {
+        this.loadReviews();
+      });
+    });
   }
 
 }

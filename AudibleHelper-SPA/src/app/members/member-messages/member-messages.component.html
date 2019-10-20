@@ -23,7 +23,8 @@
                 }}</span>
               </small>
             </div>
-            <p>{{ message.content }}</p>
+            <!-- <p>{{ message.content }}</p> -->
+            <pre>{{ message.content }}</pre>
           </div>
         </div>
         <!-- to me -->
@@ -47,7 +48,7 @@
               </small>
               <!-- <strong class="primary-font float-right">{{ message.senderKnownAs }}</strong> -->
             </div>
-            <p class="text-right">{{ message.content }}</p>
+            <pre class="text-right">{{ message.content }}</pre>
           </div>
         </div>
       </li>
@@ -56,14 +57,15 @@
   <div class="card-footer">
     <form #messageForm="ngForm" (ngSubmit)="messageForm.valid && sendMessage()">
       <div class="input-group">
-        <input type="text"
+        <textarea type="text"
         [(ngModel)]="newMessage.content"
         name="content"
         required
         class="form-control input-sm"
         placeholder="Send private message">
+        </textarea>
         <div class="input-group-append">
-          <button class="btn btn-primary" [disabled]="!messageForm.valid">Send</button>
+          <button class="btn btn-primary" [disabled]="!messageForm.valid"><i class="fa fa-paper-plane"></i></button>
         </div>
       </div>
     </form>

@@ -113,5 +113,24 @@ namespace AudibleHelper.API.Controllers
             var users = await _repo.GetAllUsers();
             return Ok(users);
         }
+        [HttpGet("GetUnreadMessageCount")]
+        public IActionResult GetUnreadMessageCount()
+        {
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var count = _repo.GetUnreadMessageCount(userId);
+            return Ok(count);
+        }
+
+        [HttpPost("DeleteMessageRange")]
+        public async Task<IActionResult> DeleteMessageRange(DeleteDto dto)
+        {
+            var messages = await _repo.GetMessagesForDelete(dto);
+            _repo.RemoveMultiple(messages);
+            if(await _repo.SaveAll())
+            {
+                return Ok();
+            }
+            return BadRequest("Could not delete messages");
+        }
     }
 }
