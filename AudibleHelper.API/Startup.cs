@@ -103,7 +103,12 @@ namespace AudibleHelper.API
             seeder.SeedUsers();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseAuthentication();
-            app.UseMvc();
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+            app.UseMvc(routes => {
+                routes.MapSpaFallbackRoute("spa-fallback",
+                    new { controller = "FallBack", action = "Index" });
+            });
         }
     }
 }

@@ -26,8 +26,8 @@
         </div>
         <div class="card-footer" *appHasRole="['Admin']">
           <div class="btn-group d-flex" >
-            <button class="btn btn-primary w-100" [routerLink]="['/reviews',user.id]" routerLinkActive="router-link-active" >Records</button>
-            <button class="btn btn-success w-100">Payments</button>
+            <button class="btn btn-primary w-100" [routerLink]="['/reviews',user.id]" title="reviews"><i class="fa fa-amazon"></i></button>
+            <button class="btn btn-success w-100"[routerLink]="['/assignments',user.id]" title="assignments"><i class="fa fa-history"></i></button>
           </div>
         </div>
       </div>
