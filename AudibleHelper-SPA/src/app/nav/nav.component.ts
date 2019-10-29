@@ -28,7 +28,10 @@ export class NavComponent implements OnInit, OnDestroy {
     this.authService.currentPhotoUrl.subscribe(photoUrl => this.photoUrl = photoUrl);
     this.subscription = timer(0, 15000).pipe(
       switchMap(() => this.userService.getUnreadMessage())
-    ).subscribe(count => this.unreadMessageCount = count, err => console.log(err));
+    ).subscribe(count => {
+      this.unreadMessageCount = count;
+      console.log(this.unreadMessageCount);
+    }, err => console.log(err));
   }
 
   ngOnDestroy() {

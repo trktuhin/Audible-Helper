@@ -57,6 +57,8 @@ namespace AudibleHelper.API.Controllers
         public async Task<IActionResult> AddReviewsByDate(ReviewForCreationDto dto)
         {
             int reviewerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            List<Review> reviewsToAdd = new List<Review>();
+            int count = 0;
             try
             {
                 var reviewsFromWeb = GetReviewsFromWeb(dto, reviewerId);
@@ -64,15 +66,16 @@ namespace AudibleHelper.API.Controllers
                 foreach(var review in reviewsFromWeb)
                 {
                     var revInDb = await _repo.GetReview(review.PenName,review.BookAsin,review.ReviewDate,review.ReviewTitle);
-                    if(revInDb!=null)
+                    if(revInDb==null)
                     {
-                        reviewsFromWeb.Remove(review);
+                        reviewsToAdd.Add(review);
+                        count++;
                     }
                 }
-                _repo.AddMultiple(reviewsFromWeb);
+                _repo.AddMultiple(reviewsToAdd);
                 if(await _repo.SaveAll())
                 {
-                    return Ok(reviewsFromWeb.Count);
+                    return Ok(count);
                 }
             }
             catch (System.Exception ex)

@@ -114,7 +114,7 @@ export class AssignmentListComponent implements OnInit {
      const isAdmin = this.authService.roleMatch(['Admin']);
      const today = this.datePipe.transform(new Date(), 'MM/dd/yyyy');
      const assignedDate = this.datePipe.transform(assignment.assignedDate, 'MM/dd/yyyy');
-     if (isAdmin || today !== assignedDate) {
+     if (isAdmin === false && today !== assignedDate) {
       this.alertify.error('You are not allowed to edit previous assignments');
       return;
      }
@@ -126,9 +126,16 @@ export class AssignmentListComponent implements OnInit {
      });
   }
 
-  deleteAssignment(id: number) {
+  deleteAssignment(assignment: Assignment) {
+    const isAdmin = this.authService.roleMatch(['Admin']);
+    const today = this.datePipe.transform(new Date(), 'MM/dd/yyyy');
+    const assignedDate = this.datePipe.transform(assignment.assignedDate, 'MM/dd/yyyy');
+    if (isAdmin === false && today !== assignedDate) {
+      this.alertify.error('You are not allowed to delete previous assignments');
+      return;
+     }
     this.alertify.confirmWithTitle('Are you sure', 'This will be deleted', () => {
-      this.assService.deleteAssignment(id).subscribe(() => {
+      this.assService.deleteAssignment(assignment.id).subscribe(() => {
         this.alertify.success('Assignment deleted');
         this.loadAssignments();
       }, err => {
