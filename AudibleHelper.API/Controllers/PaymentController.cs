@@ -23,7 +23,7 @@ namespace AudibleHelper.API.Controllers
             _repo = repo;
         }
         [HttpGet("UnpaidSessions/{memberId}")]
-        public async Task<IActionResult> GetUnpaidSessions(int memberId)
+        public IActionResult GetUnpaidSessions(int memberId)
         {
             return Ok();
         }

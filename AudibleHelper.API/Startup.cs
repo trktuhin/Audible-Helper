@@ -33,7 +33,7 @@ namespace AudibleHelper.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+            services.AddDbContext<DataContext>(x => x.UseMySql(Configuration.GetConnectionString("DefaultConnection"))
                                 .ConfigureWarnings(warnings => warnings.Ignore(CoreEventId.IncludeIgnoredWarning)));
             IdentityBuilder builder = services.AddIdentityCore<User>(opt => {
                 opt.Password.RequireDigit = false;
@@ -66,7 +66,7 @@ namespace AudibleHelper.API
                     .RequireAuthenticatedUser().Build();
                 options.Filters.Add(new AuthorizeFilter(policy));
             })
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
             .AddJsonOptions( opt => {
                 opt.SerializerSettings.ReferenceLoopHandling=Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
@@ -114,7 +114,7 @@ namespace AudibleHelper.API
                     .RequireAuthenticatedUser().Build();
                 options.Filters.Add(new AuthorizeFilter(policy));
             })
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
             .AddJsonOptions( opt => {
                 opt.SerializerSettings.ReferenceLoopHandling=Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
@@ -128,7 +128,6 @@ namespace AudibleHelper.API
             
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env,Seed seeder)
         {
             if (env.IsDevelopment())

@@ -199,7 +199,7 @@ namespace AudibleHelper.API.Controllers
                     nextPage = doc.GetElementbyId(nextPageId).GetAttributeValue("value", "");
                     nextPageNo = Convert.ToInt32(nextPage);
                     
-                } catch(Exception ex)
+                } catch(Exception)
                 {
                     nextPageNo = -1;
                 }
@@ -247,7 +247,7 @@ namespace AudibleHelper.API.Controllers
                     DataRow row = dt.Rows.Add();
                     foreach (var cell in wsRow)
                     {
-                        row[cell.Start.Column - 1] = cell.Text;
+                        row[cell.Start.Column - 1] = cell.Value;
                     }
                 }
             }

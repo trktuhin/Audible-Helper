@@ -1,0 +1,29 @@
+{
+    "deploy": {
+      "packages": [
+        {
+          "name": "Version 1.0",
+          "description": "Audible Helper Version 1.0",
+          "files": ["AudibleHelper.API/bin/Debug/netcoreapp2.2/publish/**"]
+        }
+      ],
+      "targets": [
+        {
+          "type": "sftp",
+          "name": "Linux",
+          "description": "Remote Linux Server",
+          "dir": "/var/audiblehelper",
+          "mappings": [
+              {
+                  "source": "/AudibleHelper.API/bin/Debug/netcoreapp2.2/publish",
+                  "target": "/"
+              }
+          ],
+          "host": "162.243.161.53",
+          "port": 22,
+          "user": "root", "password": "Trk4889!",
+          "checkBeforeDeploy": true
+        }
+      ]
+    }
+  }

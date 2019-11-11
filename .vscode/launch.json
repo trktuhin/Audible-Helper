@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/AudibleHelper.API/bin/Debug/netcoreapp2.2/DatingApp.API.dll",
+            "program": "${workspaceFolder}/AudibleHelper.API/bin/Debug/netcoreapp2.1/AudibleHelper.API.dll",
             "args": [],
             "cwd": "${workspaceFolder}/AudibleHelper.API",
             "stopAtEntry": false,
