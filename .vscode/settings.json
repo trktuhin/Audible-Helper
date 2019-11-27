@@ -2,9 +2,9 @@
     "deploy": {
       "packages": [
         {
-          "name": "Version 1.0",
-          "description": "Audible Helper Version 1.0",
-          "files": ["AudibleHelper.API/bin/Debug/netcoreapp2.2/publish/**"]
+          "name": "Version 1.5",
+          "description": "Audible Helper Version 1.5",
+          "files": ["AudibleHelper.API/bin/Debug/netcoreapp2.1/publish/**"]
         }
       ],
       "targets": [
@@ -15,11 +15,11 @@
           "dir": "/var/audiblehelper",
           "mappings": [
               {
-                  "source": "/AudibleHelper.API/bin/Debug/netcoreapp2.2/publish",
+                  "source": "/AudibleHelper.API/bin/Debug/netcoreapp2.1/publish",
                   "target": "/"
               }
           ],
-          "host": "162.243.161.53",
+          "host": "178.128.32.128",
           "port": 22,
           "user": "root", "password": "Trk4889!",
           "checkBeforeDeploy": true
