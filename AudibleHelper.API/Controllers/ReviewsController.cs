@@ -13,6 +13,7 @@ using AudibleHelper.API.Models;
 using AutoMapper;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 
@@ -24,11 +25,14 @@ namespace AudibleHelper.API.Controllers
     public class ReviewsController : ControllerBase
     {
         private readonly IAudibleRepository _repo;
+        private readonly UserManager<User> _userManager;
+
         private readonly IMapper _mapper;
-        public ReviewsController(IAudibleRepository repo, IMapper mapper)
+        public ReviewsController(IAudibleRepository repo, IMapper mapper,UserManager<User> userManager)
         {
             _mapper = mapper;
             _repo = repo;
+            _userManager = userManager;
         }
 
         [HttpPost("GetReviews")]
@@ -80,7 +84,7 @@ namespace AudibleHelper.API.Controllers
             }
             catch (System.Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ex);
             }
             return BadRequest("Could not add reviews");
         }
@@ -119,7 +123,7 @@ namespace AudibleHelper.API.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ex);
             }
             return Ok(count);
         }
@@ -133,7 +137,7 @@ namespace AudibleHelper.API.Controllers
             while (nextPageNo != -1)
             {
                 Review review;
-                string url;
+                string url="";
                 string nextPageId;
                 if (dto.Country.ToLower() == "us")
                 {
@@ -258,8 +262,10 @@ namespace AudibleHelper.API.Controllers
         public async Task<IActionResult> DeleteReview(ReviewDetailDto dto)
         {
             int reviewerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var user = await _repo.GetUser(reviewerId);
+            var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
             var reviewInDb = await _repo.GetReview(dto.PenName, dto.BookAsin, dto.ReviewDate, dto.ReviewTitle);
-            if(reviewerId != reviewInDb.ReviewerId)
+            if(reviewerId != reviewInDb.ReviewerId && !isAdmin)
             {
                 return Unauthorized();
             }
@@ -274,6 +280,13 @@ namespace AudibleHelper.API.Controllers
         [HttpPost("DeleteRange")]
         public async Task<IActionResult> DeleteRange(ReviewParams revParams)
         {
+            int reviewerId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var user = await _repo.GetUser(reviewerId);
+            var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+            if(!isAdmin)
+            {
+                return Unauthorized();
+            }
             var reviews = await _repo.GetReviewsForDelete(revParams);
             _repo.RemoveMultiple(reviews);
             if(await _repo.SaveAll())

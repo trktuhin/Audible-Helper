@@ -55,5 +55,91 @@
 }
 
 .navbar-nav .active>.nav-link {
-  color: #f5841b !important;
+  color: #fd7607 !important;
+  font-weight: bolder;
+  font-size: 15px;
 }
+.navbar-nav .active>.nav-link:hover{
+  color: white !important;
+}
+
+.bg-one{
+  display: block;
+  position: fixed;
+  background:linear-gradient(0deg,rgba(0, 0, 0, 0.6),rgba(0, 0, 0, 0.6)),url(./assets/one.JPG);
+  background-size: cover;
+  height: 100%;
+  z-index: -2;
+  width: 100%;
+}
+
+.bg-two{
+  display: block;
+  position: fixed;
+  background:linear-gradient(0deg,rgba(0, 0, 0, 0.6),rgba(0, 0, 0, 0.6)),url(./assets/two.JPG);
+  background-size: cover;
+  height: 100%;
+  z-index: -2;
+  width: 100%;
+}
+
+.bg-three{
+  display: block;
+  position: fixed;
+  background:linear-gradient(0deg,rgba(0, 0, 0, 0.6),rgba(0, 0, 0, 0.6)),url(./assets/three.JPG);
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+  z-index: -2;
+}
+.bg-four{
+  display: block;
+  position: fixed;
+  background:linear-gradient(0deg,rgba(0, 0, 0, 0.6),rgba(0, 0, 0, 0.6)),url(./assets/four.JPG);
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+  z-index: -2;
+
+}
+.bg-five{
+  display: block;
+  position: fixed;
+  background:linear-gradient(0deg,rgba(0, 0, 0, 0.6),rgba(0, 0, 0, 0.6)),url(./assets/five.JPG);
+  background-size: cover;
+  height: 100%;
+  z-index: -2;
+  width: 100%;
+}
+.bg-six{
+  display: block;
+  position: fixed;
+  background:linear-gradient(0deg,rgba(0, 0, 0, 0.6),rgba(0, 0, 0, 0.6)),url(./assets/six.JPG);
+  background-size: cover;
+  height: 100%;
+  z-index: -2;
+  width: 100%;
+}
+.bg-seven{
+  display: block;
+  position: fixed;
+  background:linear-gradient(0deg,rgba(0, 0, 0, 0.3),rgba(0, 0, 0, 0.3)),url(./assets/seven.JPG);
+  background-size: cover;
+  height: 100%;
+  z-index: -2;
+  width: 100%;
+}
+.bg-eight{
+  display: block;
+  position: fixed;
+  background:linear-gradient(0deg,rgba(0, 0, 0, 0.3),rgba(0, 0, 0, 0.3)),url(./assets/eight.JPG);
+  background-size: cover;
+  height: 100%;
+  z-index: -2;
+  width: 100%;
+}
+
+.trkPT150{
+  padding-top: 55px;
+}
+

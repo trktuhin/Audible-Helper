@@ -9,3 +9,11 @@ img{
 .navbar-brand{
   color: #f5d442;
 }
+
+a:hover,.active:hover{
+  color: white;
+}
+
+.min70 {
+  min-height: 55px;
+}

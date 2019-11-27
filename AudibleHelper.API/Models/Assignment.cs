@@ -18,5 +18,6 @@ namespace AudibleHelper.API.Models
         public string Country { get; set; }
         public int StartingRating { get; set; }
         public bool IsCompleted { get; set; }
+
     }
 }

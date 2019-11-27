@@ -43,6 +43,7 @@ export class FetchReviewComponent implements OnInit {
     this.reviewService.addReviews(this.fileToUpload, this.country, this.bookAsin).subscribe(data => {
       this.alertify.success(data + ' reviews added');
     }, err => {
+      console.log('Error',err);
       this.alertify.error('Could not add reviews');
       this.spinner.hide();
     }, () => {
@@ -60,6 +61,7 @@ export class FetchReviewComponent implements OnInit {
       this.normalTask.country, this.normalTask.minimumDate).subscribe(data => {
       this.alertify.success(data + ' reviews added');
     }, err => {
+      console.log('Error',err);
       this.alertify.error('Could not add reviews');
       this.spinner.hide();
     }, () => {

@@ -124,6 +124,13 @@ namespace AudibleHelper.API.Controllers
         [HttpPost("DeleteMessageRange")]
         public async Task<IActionResult> DeleteMessageRange(DeleteDto dto)
         {
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            var user = await _repo.GetUser(userId);
+            var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+            if(!isAdmin)
+            {
+                return Unauthorized();
+            }
             var messages = await _repo.GetMessagesForDelete(dto);
             _repo.RemoveMultiple(messages);
             if(await _repo.SaveAll())

@@ -21,8 +21,8 @@ namespace AudibleHelper.API.Data
         {
             if (!_userManager.Users.Any())
             {
-                var userData = System.IO.File.ReadAllText("Data/UserSeedData.json");
-                var users = JsonConvert.DeserializeObject<List<User>>(userData);
+                // var userData = System.IO.File.ReadAllText("Data/UserSeedData.json");
+                // var users = JsonConvert.DeserializeObject<List<User>>(userData);
                 var roles = new List<Role>
                 {
                     new Role{Name = "Member"},
@@ -35,11 +35,11 @@ namespace AudibleHelper.API.Data
                     _roleManager.CreateAsync(role).Wait();
                 }
 
-                foreach (var user in users)
-                {
-                    _userManager.CreateAsync(user, "password").Wait();
-                    _userManager.AddToRoleAsync(user, "Member").Wait();
-                }
+                // foreach (var user in users)
+                // {
+                //     _userManager.CreateAsync(user, "password").Wait();
+                //     _userManager.AddToRoleAsync(user, "Member").Wait();
+                // }
                 var adminUser = new User
                 {
                     UserName = "Admin",
