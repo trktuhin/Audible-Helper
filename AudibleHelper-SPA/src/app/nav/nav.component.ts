@@ -31,7 +31,9 @@ export class NavComponent implements OnInit, OnDestroy {
     ).subscribe(count => {
       this.unreadMessageCount = count;
       console.log(this.unreadMessageCount);
-    }, err => console.log(err));
+    }, err => {
+      console.log(err);
+    });
   }
 
   ngOnDestroy() {

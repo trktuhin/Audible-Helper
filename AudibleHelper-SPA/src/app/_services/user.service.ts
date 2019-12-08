@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { User } from '../_models/user';
 import { PaginatedResult } from '../_models/pagination';
 import { map } from 'rxjs/operators';
 import { Message } from '../_models/message';
 import { PasswordChange } from '../_models/passwordChange';
 import { DatePipe } from '@angular/common';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ import { DatePipe } from '@angular/common';
 export class UserService {
   baseUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient, private datePipe: DatePipe) {}
+  constructor(private http: HttpClient, private datePipe: DatePipe, private authService: AuthService) {}
 
   getUsers(page?, itemsPerPage?, userParams?, likeParams?): Observable<PaginatedResult<User[]>> {
     const paginatedResult: PaginatedResult<User[]> = new PaginatedResult<
@@ -125,6 +126,11 @@ export class UserService {
   }
 
   getUnreadMessage() {
+    const isLoggedIn = this.authService.loggedIn();
+    const defaultValue = new BehaviorSubject<number>(0);
+    if (!isLoggedIn) {
+      return defaultValue.asObservable();
+    }
     return this.http.get<number>(this.baseUrl + 'users/GetUnreadMessageCount');
   }
 
